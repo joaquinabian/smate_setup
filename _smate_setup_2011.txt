@@ -1,0 +1,468 @@
+- Download stellarmate from site
+- Put microSD card in white USB adapter
+- Put USB adapter directly on USB2 port (Ballena failed with USB extension)
+- Use SD Card Formatter
+    Quick Format
+    Volume label: sm_155_mstr   # label up to 11 chars lenght
+- Use Ballena Etcher
+    Flash from file -> select StellarMateOS_1.5.5.img.xz
+    SD card is automatically detected at F:\
+    Flash!
+
+- Connect PC to stellarmate wifi
+- key for router: stellarmate@smate
+
+- Connect iPad to stellarmate wifi
+- Connect to stellarmate with Stellarmate App
+- Check assigned IP on the app front page (right)
+- Go to Device on App and select a local network wifi -> FRITZ_PLUS_442D
+- Set home router pass.
+- Connection will be loss and then automatically recovered on App
+- Connection will be lost in PC
+- Create a VNC connection using the IP seen in the App.
+- Connect
+
+
+*************************** Update Solftware ********************************
+- Update stellarmate by VNC with 'Update Software'
+- sudo apt install geany
+- sudo geany /boot/config.txt
+- Modify hdmi group=2 mode=82 (1920x1080) 
+  (https://www.raspberrypi.org/documentation/configuration/config-txt/video.md)
+
+
+************************* Config Raspi ******************************
+(Esto se hizo despues de poner las IPs estáticas, 
+pero debería haberse hecho aquí)
+- raspi-config->Localisation Set 
+    locale: defaults (english usa)
+    timezone: defaults (madrid)
+    keyboard: model,Generic 105-key; layout, Spanish; variant, Spanish
+    wifi country: ES
+
+  
+***************************** Añadir WIFIs ********************************
+- In App->Device select new wifi -> FRITZ_442D
+- Set home router pass.
+
+Esta parte está un poco liada.
+Cuando se cambia la wifi el VNC se desconecta. 
+Si se pasa de hotspot a network o viceversa cambia la IP por lo que hay
+que cambiar de conexion en el VNC.
+En el ipad parece que es más automático.
+El objetivo final es que aparezcan todas las wifis disponibles en Network
+Connections, cada una con su prioridad.
+Al final, la mayor parte la hice por VNC. 
+Es lento porque stellarmate pasa a hotspot cada vez
+Hay que reconectar VNC como hotspot.
+Al reconectarse es cuando pide el pass
+El resultado es
+FRITZ_PLUS_442D     6
+FRITZ_442D          4
+MOVISTAR_PLUS_442D  3
+MOVISTAR_442D       2
+stellarmate         -5
+
+
+****************************** Set static ip ***********************************
+Check https://youtu.be/6qsyPTDU2aY for static IP and ethernet connection
+- Editar cada red wifi en Network Connections
+- IPv6 method -> Ignore
+- IPv4 method -> manual
+  Address: 192.168.1.211
+  Netmask: 24
+  gateway: 192.168.1.1
+  dns servers: 80.58.61.250, 80.58.61.254
+- ifconfig -> sale la antigua IP
+- cambiar red -> desconexion vnc
+- cerrar vnc y conectar con conexion .211 (stellarmate_local)
+- ifconfig -> da nueva IP estática.
+
+
+********************************** more ****************************************
+- sudo apt-get install simplescreenrecorder
+- ln -s /home/stellarmate/.indi/logs /home/stellarmate/Desktop
+- change name of folder to indi_logs
+- ln -s /home/stellarmate/.local/share/kstars/logs /home/stellarmate/Desktop
+- change name of folder to kstars_logs
+
+
+************************* KStars Geographic Location ***************************
+- Settings->Set Geographical Location
+- Tiana, Barcelona, Spain
+- Lat 41 28 27
+- Long 02 16 20
+- Elev 88
+- UTOffset=2, DST Rules=EU
+
+
+*************************** KStars FOV symbols *********************************
+- Settings->FOV symbols->Edit FVO
+- Remove all
+- Set Celestron SkyMaster 20x80: Binocular / 126 arcmin / circle
+- Set TS Optics - D90: Camera / 480 / 4288x2848/5.51x5.51 / rectangle -> FOV 169.2 x 112.4 arcmin
+- Set Edge HD - D90: Camera / 2032 / 4288x2848/5.51x5.51 / rectangle -> FOV 39.97x26.55 arcmin
+
+
+****************************** Map serial ports *******************************
+- with serial port assistant
+
+
+******************** set pegasus power board advance **************************
+- Use EKOS profile with simulators and PPBA 
+- In /dev/serial/by-id there is a symlink  pointing to:
+    ../../ttyUSB1
+  named
+    usb-Pegasus_Astro_PPBADV_revA_PPBA4PSFVS-if00-port0    
+- Use symlink name in the INDI communication port for PPBA
+    /dev/serial/by-id/usb-Pegasus_Astro_PPBADV_revA_PPBA4PSFVS-if00-port0
+
+
+******************************* more 200907 **********************************
+- sudo apt install lshw
+- sudo apt install usbview
+- sudo apt install sysinfo
+- sudo apt install hardinfo
+
+
+********************************************************************************
+************************** Mas Cosas Septiembre ********************************
+********************************************************************************
+- sd7 en scope
+- clonado a sd8 (200826)
+
+
+************************* Setup SSD Samsung T5 *********************************
+https://indilib.org/forum/stellarmate/7577-zippity.html#58671
+- sd8 en rpi glass 1
+- sudo geany -w /etc/default/rpi-eeprom-update
+    FIRMWARE_RELEASE_STATUS="stable"
+- sudo rpi-eeprom-update -d -a
+- sync
+- sudo reboot
+- vcgencmd bootloader_version
+    check it is > June 15, 2020
+- Open SD card copier
+    from sd card to ssd     # no recuerdo exactamente el nombre de unidades
+- shutdown, remove sd card
+- restart
+
+After a while, for no special reason, ssd was moved from raspi to usb3 hub
+
+
+****************************Install gps*****************************************
+- sd8 en rpi glass 2
+- se instaló gps en PC-RADIO/ubuntu y funcionó
+- conectar gps a raspi.
+- Cerca ventana. No es necesario en exterior
+- gpsmon    # datos en ncurses
+- xgps      # datos en gui y grid con satélites
+- cgps
+- systemctl | grep gpsd
+  gpsd.service   loaded active running   GPS (Global Positioning System) Daemon                                                       
+  gpsd.socket    loaded active running   GPS (Global Positioning System) Daemon Sockets
+
+- indiserver -vv indi_gpsd > /home/stellarmate/Desktop/indiserver_log2.txt 2>&1
+
+
+**************************Install external wifi*********************************
+- rpi glass 1
+- sudo apt install git
+- sudo apt instal bc
+- sudo apt install bc
+- sudo apt-get install dkms
+
+- sudo cp /lib/modules/$(uname -r)/build/arch/arm/Makefile /lib/modules/$(uname -r)/build/arch/arm/Makefile.$(date +%Y%m%d%H%M)
+- sudo sed -i 's/-msoft-float//' /lib/modules/$(uname -r)/build/arch/arm/Makefile
+- sudo ln -s /lib/modules/$(uname -r)/build/arch/arm /lib/modules/$(uname -r)/build/arch/armv7l
+
+- mkdir usbwifi
+- cd usbwifi
+- git clone https://github.com/brektrou/rtl8821CU.git
+- cd rtl8821CU/
+- make
+- sudo make install
+
+- cd /lib/modules/5.4.51-v7l+/kernel/drivers/net/wireless/realtek
+- sudo mkdir rtl8821cu
+- cd ..
+- sudo cp 8821cu.ko realtek/rtl8821cu/8821cu.ko
+- modprobe 8821cu
+
+- iwconfig wlan0 | grep -i --color quality
+- iwconfig wlan1 | grep -i --color quality
+
+
+******************** Eliminate raspi bluetooth / wifi **************************
+- sudo geany /boot/config.txt
+    # Disable board wifi, bluetooth (quim 200925)
+    # En smate_slave solo bluetooth (quim 201019)
+    dtoverlay=disable-wifi
+    dtoverlay=disable-bt
+- sudo geany /etc/modprobe.d/raspi-blacklist.conf
+    # disable wifi internal module (quim 200925)
+    blacklist brcmfmac
+    blacklist brcmutil
+- sudo geany /etc/wpa_supplicant/wpa_supplicant.conf
+    country=ES              # era KW. master y slave
+- sudo systemctl stop dhcpcd.service
+
+
+******************************* Install wavemon ********************************
+- sudo apt install wavemon
+- geany ~/.wavemonrc
+    interface = wlan0
+    cisco_mac = off
+    sort_order = chan/sig
+    sort_ascending = off
+    stat_updates = 100
+    lhist_slot_size = 1
+    meter_smoothness = 0
+    info_updates = 10
+    override_auto_scale = off
+    lo_threshold_action = disabled
+    hi_threshold_action = disabled
+    startup_screen = info screen
+- sudo setcap cap_net_admin=eip /usr/bin/wavemon
+- wavemon
+
+************************** SET SAMBA SERVER ************************************
+- ToBeDocumented
+https://pimylifeup.com/raspberry-pi-samba/
+
+>> sudo geany /etc/samba/smb.conf
+
+    [Pictures]
+    comment = StellarMate Photos
+    path = /home/stellarmate/Pictures
+    browsable =yes
+    writable = yes     
+    available = yes
+    guest ok = yes
+    read only = no
+    public = yes
+    printable = no
+    guest account = stellarmate
+    force user= stellarmate
+    
+Creo que samba ya estaba instalada, con la configuración ya hecha
+
+In Pictures create document folder:
+- samba_share_slave
+- samba_share_master
+
+En Windows
+- This PC -->  Map Network Drive
+- Folder: \\192.168.1.211\Pictures       (o el que corresponda)
+- --> Finish --> Crea inmediatamente el folder y da acceso
+- rename folders
+    - smate_local_master      (unidad Z:)
+    - smate_local_slave       (unidad Y:)
+
+Previamente me pidió credentials (pero creo que no es necesario):
+- network credentials:
+    user: stellar@mate
+    psw:  smate
+
+
+*********************** Do NOT START KSTARS AT BOOT ****************************
+- MENU -> Preferences -> Main Menu Editor
+
+In the Main Menu editor GUI:
+- Preferences
+- Check Desktop Session Settings
+- OK
+ss
+- MENU -> Preferences -> Desktop Session Settings
+
+In the Desktop Session Settings:
+- Uncheck Kstars
+
+
+********************************************************************************
+*********************************200927*****************************************
+********************************************************************************
+
+************************CONFIG REPEAT KEYS**************************************
+
+>> x11vnc -display :0 -R DIRECT:keycode:38,1
+
+Ha llegado a funcionar. No es estable repite keys pero de repente para.
+
+
+**********************CONFIG MASTER-SLAVE NETWORK SYSTEM************************
+In raspi slave
+- indiserver -v indi_gpsd indi_simulator_telescope | tee ~/Desktop/indi_log.txt
+  indiserver y indi_gpsd aparecen como procesos en Task Manager
+  
+In raspi main
+- Start Kstars -> EKOS -> Profile Editor
+- Profile 'test_gps_mount_remote'
+    Mode:Local
+    Devices: CCD Simulator, Guide Sim, Focuser Sim
+    Remote: GPSD@192.168.1.212:7624,Telescope Simulator@192.168.1.212:7624
+    Primary: TS Optics...(3)
+    Guide: SX Lodestar (2)
+    
+
+ToBeTested: alternative design:
+    - raspi slave.  hotspot mode.
+    - raspi master. two networks.
+        wlan0 : connected to raspi slave hotspot
+        wlan1 : connected to network
+
+
+****************************** TELNET + INDI ***********************************
+  
+>> sudo apt install telnet
+
+***************************  SET SKI SAFARI ************************************
+
+Sky Safari configuration -> Telescope ->
+    host: 192.168.1.211
+    port: 9624
+    
+In bottom bar, click on telescope -> Connect
+
+********************** INSTALL NEW KuWFi USB WiFi ADAPTER **********************
+https://github.com/aircrack-ng/rtl8812au
+
+- Using current wifi adapter
+- cd usbwifi/
+- mkdir rtl8814AU_AC
+- cd rtl8814AU_AC/
+- git clone -b v5.6.4.2 https://github.com/aircrack-ng/rtl8812au.git
+- cd rtl8812au/
+- sudo ./dkms-install.sh 
+
+the driver 88XXau.ko is in:
+    /var/lib/dkms/rtl8812au/5.6.4.2/5.4.51-v7l+/armv7l/module
+
+- Connect device to USB3 hub
+- Inmediately it searchs for wifi
+- In network manager -> Edit Connections, for each connection:
+- in Wi-Fi tab select the new Device
+- remove the old adapter
+- remove all connections created while the two adapters were connected.
+
+******************SET ACCESS POINT WITH TP-LINK WR841n ROUTER*******************
+*********************************FAILED***************************************** 
+- disconnect wifi adapter from raspi
+- connect patch ethernet cable (gris):
+        SYSTIMAX-I 1074D 4/24 (UL) CM AU012402A  
+  to raspi and router LAN ports 
+- smate_main in DIRECT ETHERNET MODE
+    Connect automatically -> no
+    All users can connect -> yes
+    DEVICE: eth0
+    WOL:    Default
+    Proxy Method: None
+    IP:         192.168.100.1
+    NETMASK:    24
+    Gateway:    192.168.100.1
+    DNS Servers:192.168.100.1
+   
+- connect PC to router wifi TP-LINK_446C
+- en chrome go to http://tplinkwifi.net/
+    user: admin
+    pass: admin
+- cambiar IP del router a 
+    IP: 192.168.100.10     (reboot automático)
+- dejar el resto de parámetros del router como están:
+    DHCP server:    enable
+    Start IP:       192.168.100.100
+    End IP:         192.168.100.199
+    Lease time:     120
+    Default Gateway:192.168.100.10
+    DNS (P&S):      0.0.0.0
+
+- Establecer de nuevo la conexion wifi (PC) y Direct Ethernet (raspi)
+- Connectar a stellarmate via VNC (IP:192.168.100.1)
+
+- No recuerdo bien. Creo que falló al intentar conectar smate_slave
+
+NOTA: Hay manual de TP link
+      Instrucciones en https://www.tp-link.com/es/support/faq/417/
+      
+*************************CHANGE RASPI NAME**************************************
+ToBeDocumented
+- stellarmate@master
+- stellarmate@slave
+
+***************************USE TP-LINK AS ROUTER********************************
+- TP-Link sin ninguna conexion
+    IP:         192.168.100.10
+    LAN
+        MAC Add:    84-16-F9-D9-44-6C
+        Subnet Mask:255.255.255.0
+        IGMP Proxy: Enable     ??
+    WIRELESS SETT
+        chan width: auto
+        channel:    auto
+        Enable Wireless Router Radio
+        Enable SSID Broadcast
+    DHCP
+        Server: Enable
+        Start:      192.168.100.100
+        End:        192.168.100.199
+        time:       120
+        gateway:    192.168.100.10
+        add reservation:  192.168.100.1 y 192.168.100.2  
+
+- smate_master_router con wifi_adapter (dos antenas)
+    IP:     192.168.100.1
+    broadcast:192.168.100.255
+    Connected to TP-Link
+        Connect automat priority:100
+        Mode:       client
+        Band:       Automatic
+        Device:     wlan0 (1C:BF:CE:F9:77:D3)
+        MTU:        Automatic
+        Security:   WPA&WPA2 Personal
+        Password:   83817472
+        Method:     None
+        IPv4:       Automatic (DHCP)
+        IPv6:       Automatic
+
+- smate_slave_router con on-board wifi
+    IP:192.168.100.2
+    broadcast:192.168.100.255
+    Connected to TP-Link
+        Connect automat priority:100
+        Mode:       client
+        Band:       Automatic
+        Device:     wlan0 (DC:A6:32:39:BA:2B)
+        MTU:        Automatic
+        Security:   WPA&WPA2 Personal
+        Password:   83817472
+        Method:     None
+        IPv4:       Automatic (DHCP)
+        IPv6:       Automatic
+- PC connected to router wifi TP-LINK_446C
+
+ESTO FUNCIONA
+
+******************************SET TIME******************************************
+Connection with router
+Profile simulators + GPS
+
+- internet time (ipad): 21:53
+- smate_slave:
+    system time:    00:06
+    cgps time:      19:58:
+- smate_master:
+    system time:    00:07
+    kstars time:    09:58:
+    indi_gpsd  :    19:37 UTC  (queda congelado, actualiza con Refresh GPS. OK)
+    indi_gpsd  :     2.0  UTC offset
+    
+Buscar método para sincronizar system time:
+1) python script
+2) chrony
+3) ????
+
+*****************************ADD TEMPERATURE MONITOR******************************
+- Right click on panel --> Add/remove Panel items
+- Panel Applets --> Add --> CPU Temperature Monitor
+
+********************************************************************************
