@@ -465,4 +465,15 @@ Buscar método para sincronizar system time:
 - Right click on panel --> Add/remove Panel items
 - Panel Applets --> Add --> CPU Temperature Monitor
 
+*************************WORKING WITH GIT*****************************************
+# git is already installed on raspi
+# see https://projects.raspberrypi.org/en/projects/getting-started-with-git
+#     https://www.raspberrypi.org/magpi-issues/MagPi27.pdf
+#     https://www.raspberrypi.org/magpi-issues/MagPi28.pdf
+#
+git config --global user.name "joaquinabian"
+git config --global user.email "gatoygata2@gmail.com"
+git config --global core.editor geany
+
+git config --global core. autocrlf input    # to share with windows
 ********************************************************************************
