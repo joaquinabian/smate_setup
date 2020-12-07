@@ -325,6 +325,11 @@ Sky Safari configuration -> Telescope ->
 In bottom bar, click on telescope -> Connect
 
 ********************** INSTALL NEW KuWFi USB WiFi ADAPTER **********************
+## WARNING 201205!! 
+## Esto ha dejado de funcionar con los cambios en el repositorio
+## El driver rtl8814au deja de estar soportado y el driver
+## en el nuevo repositorio https://github.com/raplin/rtl8814au no funciona.
+##
 https://github.com/aircrack-ng/rtl8812au
 
 - Using current wifi adapter
