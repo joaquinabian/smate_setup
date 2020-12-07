@@ -28,11 +28,6 @@ fi
 #
 #
 echo
-echo "*****  SETTING SYSTEM UP-TO-DATE   ******"
-sudo apt -y update
-sudo apt -y upgrade
-#
-echo
 echo "*****  DEFINE RASPI MASTER/SLAVE *******"
 #
 text="Is this raspberry pi a\n"
@@ -57,6 +52,19 @@ fi
 #
 export RPITYPE
 #
+#
+echo
+echo "******  GET INTERNET FIRST  ******"
+TEXT="set wifi connections (home network)"
+SCRIPT="set_wifi_home.sh"
+execute_shell "$TEXT" "$SCRIPT"
+#
+echo
+echo "*****  SETTING SYSTEM UP-TO-DATE   ******"
+sudo apt -y update
+sudo apt -y upgrade
+#
+#
 #################################    START CONFIGURATIONS    #######################################
 #
 TEXT="configuring keyboard, locale, timezone and screen resolution"
@@ -66,11 +74,6 @@ execute_shell "$TEXT" "$SCRIPT"
 #
 TEXT="installing useful programs"
 SCRIPT="install_programs.sh"
-execute_shell "$TEXT" "$SCRIPT"
-#
-#
-TEXT="set wifi connections (home network)"
-SCRIPT="set_wifi_home.sh"
 execute_shell "$TEXT" "$SCRIPT"
 #
 #
