@@ -23,8 +23,8 @@ sudo apt install hardinfo
 echo "Install wavemon"
 sudo apt install wavemon
 #
-TARGET="~/.wavemonrc"
-cat > $TARGET <<- EOF
+TARGET="$HOME/.wavemonrc"
+cat > "$TARGET" <<- EOF
 interface = wlan0
 cisco_mac = off
 sort_order = chan/sig

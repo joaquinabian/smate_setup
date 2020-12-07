@@ -1,7 +1,7 @@
 #!/bin/bash
+# Common Raspberry pi configuration steps
 #
-#
-############################### SET SPANISH KEYBOARD ##############################
+###################################    SET SPANISH KEYBOARD    #####################################
 TARGET="/etc/default/keyboard"
 echo "Setting Spanish keyboard at $TARGET"
 #
@@ -15,7 +15,7 @@ BACKSPACE=guess
 EOF
 #
 #
-################################ SET US LOCALE  ###################################
+######################################   SET US LOCALE   ###########################################
 TARGET="/etc/default/locale"
 echo "Setting US locale at $TARGET"
 #
@@ -27,13 +27,13 @@ LANGUAGE=en_US.UTF-8
 EOF
 #
 #
-############################### SET MADRID TIMEZONE #################################
+###################################   SET MADRID TIMEZONE   ########################################
 echo "Setting Madrid Timezone"
 #
 sudo timedatectl set-timezone Europe/Madrid
 #
 #
-###############################  SET WIFI COUNTRY  #################################
+####################################  SET WIFI COUNTRY  ############################################
 # this is not permanently set on raspi when using raspi-config
 # raspi-config does not modify /etc/default/crda
 # my raspi 4 seems to work OK without this setting
@@ -41,7 +41,7 @@ sudo timedatectl set-timezone Europe/Madrid
 # sudo iw reg set ES
 #
 #
-############################  SET SCREEN RESOLUTION ###############################
+##################################  SET SCREEN RESOLUTION  #########################################
 # 1920x1080 60Hz 1080p-> group 2, mode 82   
 # https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
 TARGET="/boot/config.txt"
@@ -58,4 +58,18 @@ sed -i "s/^\#\?.\?hdmi_group:0=.*$/hdmi_group:0=2/g" $TARGET
 sed -i "s/^\#\?.\?hdmi_mode:0=.*$/hdmi_mode:0=82/g" $TARGET
 #
 #
-###################################################################################
+##############################  SET CPU TEMPERATURE  ###############################################
+echo "Setting CPU Temperature Widget"
+TARGET="/home/stellarmate/.config/lxpanel/LXDE-pi/panels/panel"
+#
+cat > $TARGET <<- EOF
+Plugin {
+  type=cputemp
+  config {
+  }
+}
+EOF
+#
+#
+##################################       #######################################
+
