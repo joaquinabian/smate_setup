@@ -29,16 +29,21 @@ fi
 #
 echo
 echo "*****  DEFINE RASPI MASTER/SLAVE *******"
+echo
 #
-text="Is this raspberry pi a\n"
-text+="- Master (.211)\n"
-text+="- Slave  (.212)\n"
-text+="- Test   (.215)\n"
-text+=" ¿ M / S / T ?  default T -> "
-read -r -p "$text" input
+message=$(cat <<- EOF
+Is this raspberry pi a
+   - Master (.211)
+   - Slave  (.212)
+   - Test   (.215)
+   ¿ M / S / T ?  default T -> 
+EOF
+)
+#
+read -r -p "$message" input
 #
 input=${input:-"t"}
-input=$(echo "$input" | tr '[:lower:]' '[:upper:]')
+input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 #
 if [ "$input" = "m" ]
 then
