@@ -12,7 +12,8 @@ function execute_shell
     #
     ./"$2" || exit 1
     #
-    echo "$2 DONE"
+    echo
+    echo "** $2 DONE **"
     echo
 }
 #
@@ -73,7 +74,7 @@ sudo apt -y upgrade
 #################################    START CONFIGURATIONS    #######################################
 #
 TEXT="configuring keyboard, locale, timezone and screen resolution"
-SCRIPT="config_raspi.sh"
+SCRIPT="set_raspi.sh"
 execute_shell "$TEXT" "$SCRIPT"
 #
 #

@@ -31,7 +31,7 @@ echo "change raspi name to stellarmate@$RPITYPE"
 echo "to be done"
 ############################   DONT START KSTARS AT BOOT  ##########################################
 echo "Do not start KStars at boot"
-TARGET="/home/stellarmate/.config/autostart/KStars"
+TARGET="/home/stellarmate/.config/autostart/KStars.desktop"
 text="NotShowIn=LXDE;"
 echo $text >> $TARGET
 echo "done"
