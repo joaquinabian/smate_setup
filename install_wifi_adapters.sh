@@ -2,14 +2,16 @@
 #
 #
 function ask() {
-    local text="Select which driver to install:\n"
-    text+="1) brektrou RTL8821CU\n"
-    text+="2) aircrag  RTL8814AU\n"
-    text+="3) fars     RTL8821CU\n"
-    text+="4) fars     RTL8814AU\n"
-    text+="5) FINISH (default)\n"
+    question=$(cat <<- EOF
+    "Select which driver to install:
+       1) brektrou RTL8821CU
+       2) aircrag  RTL8814AU
+       3) fars     RTL8821CU
+       4) fars     RTL8814AU
+       5) FINISH (default)
+EOF
     #
-    read -r -p "$text" drivers
+    read -r -p "$question" drivers
     drivers=${drivers:-5}
     #
 }

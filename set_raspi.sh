@@ -62,7 +62,8 @@ sed -i "s/^\#\?.\?hdmi_mode:0=.*$/hdmi_mode:0=82/g" $TARGET
 echo "Setting CPU Temperature Widget"
 TARGET="/home/stellarmate/.config/lxpanel/LXDE-pi/panels/panel"
 #
-cat > $TARGET <<- EOF
+# cat >>  --> append
+cat >> $TARGET <<- EOF
 Plugin {
   type=cputemp
   config {

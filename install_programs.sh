@@ -1,26 +1,34 @@
 #!/bin/bash
 #
 # 
-echo "Install Geany"
-sudo apt install geany
+echo "** Install Geany"
+sudo apt -y install geany
+echo
 #
-echo "Install Simple Screen Recorder"
-sudo apt install simplescreenrecorder
+echo "** Install Simple Screen Recorder"
+sudo apt -y install simplescreenrecorder
+echo
 #
-echo "install lshw"
-sudo apt install lshw
+echo "** install lshw"
+sudo apt -y install lshw
+echo
 #
-echo "install usbview"
-sudo apt install usbview
+# remember to execute as root
+echo "** install usbview"
+sudo apt -y install usbview
+echo
 #
-echo "install sysinfo"
-sudo apt install sysinfo
+# Not in raspbian
+# echo "** install sysinfo"
+# sudo apt install sysinfo
+# echo
 #
-echo "install hardinfo"
+echo "** install hardinfo"
 sudo apt install hardinfo
+echo
 #
 ####################################  WAVEMON  #####################################################
-echo "Install wavemon"
+echo "** Install wavemon"
 sudo apt install wavemon
 #
 TARGET="$HOME/.wavemonrc"
@@ -44,8 +52,10 @@ startup_screen = info screen
 EOF
 #
 sudo setcap cap_net_admin=eip /usr/bin/wavemon
+echo
 #
 ###################################### TELNET ####################################################
 echo "Install TELNET"
 sudo apt install telnet
+echo
 #

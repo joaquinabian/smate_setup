@@ -34,6 +34,7 @@ else
 fi
 #
 echo "Assign Raspi <$RPITYPE> with static IP: $ipv4"
+echo
 #
 IP4="$ipv4/24"
 GW4="192.168.1.1"
@@ -57,13 +58,17 @@ set_connection FRITZ_PLUS_442D    $IP4 $GW4 "$DN4" $DH4 $DH6  6  wpa-psk $PSW
 set_connection MOVISTAR_442D      $IP4 $GW4 "$DN4" $DH4 $DH6  3  wpa-psk $PSW
 set_connection MOVISTAR_PLUS_442D $IP4 $GW4 "$DN4" $DH4 $DH6  2  wpa-psk $PSW
 #
-echo "All connections set"
-echo "Voy a connectar Raspi con HOME WIFI para tener acceso a internet"
-echo "Si estás en el PC con VNC o SSH, conecta el PC a HOME WIFI, "
-echo "cerrar la sesión VNC/SSH para hotspot y abrir conexion VNC/SSH para master o slave"
+echo "ALL CONNECTIONS SET !"
+echo
+echo "I am going to connect the Raspberry to HOME WIFI to get internet access."
+echo "If you are on the PC connected to Stellarmate HotSpot via VNC or SSH:"
+echo "  1) Connect the PC to HOME WIFI (This will happens automatically)."
+echo "  2) Close the VNC/SSH session for the HotSpot."
+echo "  3) Open a new VNC/SSH session for Master, Slave or Test Raspi Network IP."
 echo 
 #
-read -n 1 -s -r -p "Press any key for connecting Raspi to MOVISTAR_442D wifi"
+read -n 1 -s -r -p "Press any key before Starting above steps"
+echo
 #
 nmcli connection up id MOVISTAR_442D
 #
