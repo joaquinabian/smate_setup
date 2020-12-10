@@ -471,7 +471,7 @@ Buscar método para sincronizar system time:
 - Panel Applets --> Add --> CPU Temperature Monitor
 
 *************************WORKING WITH GIT*****************************************
-# git is already installed on raspi
+# git is already installed on raspi -> no on stellarmate
 # see https://projects.raspberrypi.org/en/projects/getting-started-with-git
 #     https://www.raspberrypi.org/magpi-issues/MagPi27.pdf
 #     https://www.raspberrypi.org/magpi-issues/MagPi28.pdf
