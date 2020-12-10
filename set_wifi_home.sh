@@ -23,6 +23,12 @@ function set_connection() {
 }
 #
 #
+if [ -z "$PASSWRD" ]
+then
+    read -r -p "Wifi router password ?  " PASSWRD
+fi
+#
+#
 if [ "$RPITYPE" == "slave" ]
 then
     ipv4=192.168.1.212
@@ -41,7 +47,7 @@ GW4="192.168.1.1"
 DN4="80.58.61.250 80.58.61.254"
 DH4="manual"
 DH6="ignore"
-PSW="4z4dYm6VqtA2avaTwzFw"
+PSW="$PASSWRD"
 #
 # $1 connection, SSID name (MOVISTAR_442D)
 # $2 ipv4 address
