@@ -1,17 +1,19 @@
 # smate_setup
 
-Setting-up additional programs and personal configurations to the official stellarmate image.
+Setting-up additional programs and personal configurations to the official stellarmate image.  
+This code is a first try on bash scripting. Use at your own risk.
 
 ## Procedure
 
 This is work in progress. Many changes are expected.
 Most variables (IPs, etc) are hardcoded
 
-In PC WIN
+In Ubuntu (or PC WIN)
 
-- Burn SD card with Stellarmate OS using Balena Etcher
+- Flash SD card with Stellarmate OS using Balena Etcher
+  - see <https://github.com/balena-io/etcher>
 
-In Raspi
+In Rasberry pi
 
 - Put SD on Raspi and switch it on
 - Stellarmate starts on Hotspot mode
@@ -24,11 +26,11 @@ In Ubuntu
   - Name: smate_hotspot
   - Password: ?
 - Files -> Other Files -> Locations -> STELLARMATE (single touch) --(Opening takes time)--> Pictures --Connect as Anonymous--(Opening takes time)-->
-- Copy/Paste **smate_setup** folder from **Home/programas/** to **smb://stellarmate.local/pictures/**
+- Copy/Paste **smate_setup** folder from **/Home/programas/** to **smb://stellarmate.local/pictures/**
 
-In Raspi
+In Raspi (Via VNC)
 
-- close KStars
+- Close KStars.
 - Open terminal.
   - Edit --> Preferences --> Display --> Scrollback lines = 2000
   - Do:
