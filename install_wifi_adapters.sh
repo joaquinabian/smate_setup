@@ -1,19 +1,56 @@
 #!/bin/bash
 #
 #
+UNAME=$(uname -r)
+DATE=$(date +%Y%m%d%H%M)
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+#
+#
 function ask() {
     question=$(cat <<- EOF
-    "Select which driver to install:
-       1) brektrou RTL8821CU
-       2) aircrag  RTL8814AU
-       3) fars     RTL8821CU
-       4) fars     RTL8814AU
-       5) FINISH (default)
+    Select which driver to install:
+       1.- brektrou RTL8821CU
+       2.- aircrag  RTL8814AU
+       3.- fars     RTL8821CU
+       4.- fars     RTL8814AU
+       5.- FINISH (default) ....  >  
 EOF
+)
     #
     read -r -p "$question" drivers
     drivers=${drivers:-5}
     #
+}
+#
+#
+function create_wifi_directory() {
+    echo "*** preparing usbwifi folder"
+    #
+    if [ ! -d "$DIR"/usbwifi ]
+    then
+        mkdir -m777 "$DIR"/usbwifi
+    fi
+    #
+    cd "$DIR"/usbwifi || exit 1
+}
+#
+#
+function install_requirements() {
+    echo
+    echo "*** installing git, bc, dkms & kernel header requirements ***"
+    echo
+    echo "*** installing git"
+    sudo apt -y install git
+    echo
+    echo "*** installing bc"
+    sudo apt -y install bc
+    echo
+    echo "*** installing dkms"
+    sudo apt -y install dkms
+    echo
+    echo "*** installing raspi kernel headers"
+    sudo apt install raspberrypi-kernel-headers
+    echo 
 }
 #
 #
@@ -29,86 +66,15 @@ function get_fars_robotics() {
 }
 #
 #
-#################################   START INSTALLATION #############################################
-echo
-ask
-#
-if [ "$drivers" = "5" ]
-then
-    echo "Exit without installing"
-    exit 0
-fi
-#
-#
-UNAME=$(uname -r)
-DATE=$(date +%Y%m%d%H%M)
-#
-#
-################################### install requirements ###########################################
-echo
-echo "*** installing git bc y dkms requirements ***"
-echo
-echo "*** installing git"
-sudo apt -y install git
-echo
-echo "*** installing bc"
-sudo apt -y install bc
-echo
-echo "*** installing dkms"
-sudo apt -y install dkms
-echo
-echo "*** installing raspi kernel headers"
-sudo apt install raspberrypi-kernel-headers
-echo
-#
-echo "*** preparing usbwifi folder"
-#
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-#
-if [ ! -d "$DIR"/usbwifi ]
-then
-    mkdir -m777 "$DIR"/usbwifi
-fi
-#
-cd "$DIR"/usbwifi || exit 1
-#
-#
-####################################### INSTALL DRIVERS ############################################
-#
-go=1
-#
-while $go
-do
-    case $drivers in
-        1)
-        install_rtl8821cu_brkt
-        ;;
-        2)
-        echo "Not working currently"
-        #install_rtl8814au_rcrg
-        ;;
-        3)
-        install_rtl8821cu_fars
-        ;;
-        4)
-        install_rtl8814au_fars
-        ;;
-        5)
-        echo "Finish installing drivers"
-        go=0
-        ;;
-    esac
-done
-#
-#
-################################  RTL8821CU brektrou (1)  ##########################################
+###########################  RTL8821CU brektrou (1)  ###########################
 # For the Dual Band Wifi Adapter with Antenna (The PiHut)
 # https://github.com/brektrou/rtl8821CU
 function install_rtl8821cu_brkt() {
     echo "***** install RTL8821CU ******"
     echo
 
-    sudo cp -p /lib/modules/"$UNAME"/build/arch/arm/Makefile /lib/modules/"$UNAME"/build/arch/arm/Makefile."$DATE"
+    sudo cp -p /lib/modules/"$UNAME"/build/arch/arm/Makefile \
+               /lib/modules/"$UNAME"/build/arch/arm/Makefile."$DATE"
     sudo sed -i 's/-msoft-float//' /lib/modules/"$UNAME"/build/arch/arm/Makefile
     sudo ln -s /lib/modules/"$UNAME"/build/arch/arm /lib/modules/"$UNAME"/build/arch/armv7l
     echo
@@ -123,17 +89,17 @@ function install_rtl8821cu_brkt() {
     ### method 1
     #make
     #sudo make install || exit 1
-    # cd /lib/modules/"$UNAME"/kernel/drivers/net/wireless/realtek/rtl8821cu || exit 1
-    # modprobe intelligently adds or removes a module from the Linux kernel.
-    # if module no indicated, modprobe looks in the module directory /lib/modules/'uname -r'
     #
     ### method 2
     # DKMS is a system which will automatically recompile and install a kernel 
     # module when a new kernel gets installed or updated.
     sudo ./dkms-install.sh
     #
-    # module is installed on /lib/modules/<linux version>/kernel/drivers/net/wireless/realtek/rtl8821cu
-    #
+    # driver module is installed on:
+    # /lib/modules/<linux version>/kernel/drivers/net/wireless/realtek/rtl8821cu
+    # modprobe intelligently adds or removes a module from the Linux kernel.
+    # if module no indicated, modprobe looks in the module directory /lib/modules/'uname -r'
+    # cd /lib/modules/"$UNAME"/kernel/drivers/net/wireless/realtek/rtl8821cu || exit 1
     sudo modprobe 8821cu
     #
     echo
@@ -141,7 +107,8 @@ function install_rtl8821cu_brkt() {
     echo
     #
     # Recover original Makefile
-    sudo cp -p /lib/modules/"$UNAME"/build/arch/arm/Makefile."$DATE" /lib/modules/"$UNAME"/build/arch/arm/Makefile
+    sudo cp -p /lib/modules/"$UNAME"/build/arch/arm/Makefile."$DATE" \
+               /lib/modules/"$UNAME"/build/arch/arm/Makefile
     #
     # Una vez instalado comprobar:
     # iwconfig wlan0 | grep -i --color quality
@@ -149,14 +116,13 @@ function install_rtl8821cu_brkt() {
 }
 #
 #
-###################################   RTL8814AU aircrrag (2) #######################################
-# For the KuWFi USB WiFi ADAPTER 
-# https://github.com/aircrack-ng/rtl8812au
+############################  RTL8814AU aircrrag (2) ###########################
 #
 function install_rtl8814au_rcrg() {
+    # For the KuWFi USB WiFi ADAPTER 
+    # https://github.com/aircrack-ng/rtl8812au
     echo "***** install RTL8814AU ******"
     echo
-    #
     #
     cd "$DIR"/usbwifi || exit 1
     echo
@@ -172,7 +138,8 @@ function install_rtl8814au_rcrg() {
     sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
     #
     echo "** modify dkms files"
-    #sed -i 's/^dkms build/ARCH=arm dkms build/' dkms-install.sh  # no dkms-install en repository !!
+    # no dkms-install en repository !! -- ? -->
+    #sed -i 's/^dkms build/ARCH=arm dkms build/' dkms-install.sh  
     sed -i 's/^MAKE="/MAKE="ARCH=arm\ /' dkms.conf
     #
     ### method 1
@@ -200,7 +167,7 @@ function install_rtl8814au_rcrg() {
 }
 #
 #
-###################### RTL8821CU fars robotics (3)  ############################
+######################### RTL8821CU fars robotics (3)  #########################
 #
 function install_rtl8821cu_fars(){
     echo "***** install RTL8821CU from FARS-ROBOTICS ******"
@@ -210,7 +177,7 @@ function install_rtl8821cu_fars(){
 }
 #
 #
-###################### RTL8814AU fars robotics (4)  ############################
+######################### RTL8814AU fars robotics (4) ##########################
 #
 function install_rtl8814au_fars(){
     echo "***** install RTL8814AU (RTL8812AU) from FARS-ROBOTICS ******"    
@@ -219,5 +186,44 @@ function install_rtl8814au_fars(){
     sudo install-wifi 8812au
 }
 #
+#
 ################################################################################
+#########################  START DRIVER INSTALLATION  ##########################
+################################################################################
+#
+go=true
+start=true
+#
+while $go
+do
+    ask
+    if $start && [ ! "$drivers" == 5 ]
+    then
+        install_requirements
+        create_wifi_directory
+        start=false
+    fi
+    #
+    case $drivers in
+        1)
+        install_rtl8821cu_brkt
+        ;;
+        2)
+        echo "Not working currently"
+        #install_rtl8814au_rcrg
+        ;;
+        3)
+        install_rtl8821cu_fars
+        ;;
+        4)
+        install_rtl8814au_fars
+        ;;
+        5)
+        echo "Finish installing drivers"
+        go=false
+        ;;
+    esac
+done
+#
+#
 exit 0
