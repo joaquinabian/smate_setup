@@ -38,7 +38,7 @@ else
 fi
 #
 echo "change raspi name to stellarmate@$NAME"
-sudo sed -i 's/127.0.1.1\traspberry/127.0.1.1\t"$NAME"/' /etc/hosts
+sudo sed -i 's/127.0.1.1\tstellarmate/127.0.1.1\t"$NAME"/' /etc/hosts
 echo "$NAME" > /etc/hostname
 echo "to be done"
 #
