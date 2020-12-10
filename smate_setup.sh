@@ -71,7 +71,7 @@ sudo apt -y update
 sudo apt -y upgrade
 #
 #
-#################################    START CONFIGURATIONS    #######################################
+#############################  START CONFIGURATIONS  ###########################
 #
 TEXT="configuring keyboard, locale, timezone and screen resolution"
 SCRIPT="set_raspi.sh"
