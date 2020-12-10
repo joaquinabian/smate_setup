@@ -59,10 +59,10 @@ PSW="$PASSWRD"
 # $8 security mode
 # $9 password
 #                  $1              $2   $3    $4    $5   $6  $7    $8     $9
-set_connection FRITZ_442D         $IP4 $GW4 "$DN4" $DH4 $DH6  4  wpa-psk $PSW
-set_connection FRITZ_PLUS_442D    $IP4 $GW4 "$DN4" $DH4 $DH6  6  wpa-psk $PSW
-set_connection MOVISTAR_442D      $IP4 $GW4 "$DN4" $DH4 $DH6  3  wpa-psk $PSW
-set_connection MOVISTAR_PLUS_442D $IP4 $GW4 "$DN4" $DH4 $DH6  2  wpa-psk $PSW
+set_connection FRITZ_442D         $IP4 $GW4 "$DN4" $DH4 $DH6  4  wpa-psk "$PSW"
+set_connection FRITZ_PLUS_442D    $IP4 $GW4 "$DN4" $DH4 $DH6  6  wpa-psk "$PSW"
+set_connection MOVISTAR_442D      $IP4 $GW4 "$DN4" $DH4 $DH6  3  wpa-psk "$PSW"
+set_connection MOVISTAR_PLUS_442D $IP4 $GW4 "$DN4" $DH4 $DH6  2  wpa-psk "$PSW"
 #
 echo "ALL CONNECTIONS SET !"
 echo
