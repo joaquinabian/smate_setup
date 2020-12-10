@@ -27,11 +27,24 @@ echo "done"
 # sudo nano /etc/hostname
 #   - set <name>
 #
-echo "change raspi name to stellarmate@$RPITYPE"
+if [ -z "$RPITYPE" ]
+then
+    read -r -p "Raspberry name (default stellarmate) ?  " input
+    input=${input:-"stellarmate"}
+    input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+    NAME=$input
+else
+    NAME="$RPITYPE"
+fi
+#
+echo "change raspi name to stellarmate@$NAME"
+sudo sed -i 's/127.0.1.1\traspberry/127.0.1.1\t"$NAME"/' /etc/hosts
+echo "$NAME" > /etc/hostname
 echo "to be done"
+#
 #########################   DONT START KSTARS AT BOOT  #########################
 echo "Do not start KStars at boot"
-TARGET="/home/stellarmate/.config/autostart/KStars.desktop"
+TARGET="/home/stellarmate/.config/autostart/kstars.desktop"
 text="NotShowIn=LXDE;"
 echo $text >> $TARGET
 echo "done"
