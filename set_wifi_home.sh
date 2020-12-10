@@ -3,26 +3,26 @@
 #https://developer.gnome.org/NetworkManager/stable/nm-settings-nmcli.html
 #
 #
-function set_connection
-{
-echo "Setting connection $1"
-#
-# on raspberry 'if-name' doesnot work. Must be ifname.
-nmcli connection add type wifi ifname wlan0 con-name "$1" autoconnect yes ssid "$1" ip4 "$2" gw4 "$3"
-echo "set dns"
-nmcli connection modify "$1" ipv4.dns "$4"
-echo "set ipv4 and ipv6 methods"
-nmcli connection modify "$1" ipv4.method "$5"
-nmcli connection modify "$1" ipv6.method "$6"
-echo "set priority"
-nmcli connection modify "$1" connection.autoconnect-priority "$7" 
-echo "set security"
-nmcli connection modify "$1" wifi-sec.key-mgmt "$8"
-nmcli connection modify "$1" wifi-sec.psk "$9"
-echo "all done for $1"
-echo
+function set_connection() {
+    echo "Setting connection $1"
+    # on raspberry 'if-name' doesnot work. Must be ifname.
+    nmcli connection add type wifi ifname wlan0 con-name "$1" \
+                         autoconnect yes ssid "$1" ip4 "$2" gw4 "$3"
+    echo "set dns"
+    nmcli connection modify "$1" ipv4.dns "$4"
+    echo "set ipv4 and ipv6 methods"
+    nmcli connection modify "$1" ipv4.method "$5"
+    nmcli connection modify "$1" ipv6.method "$6"
+    echo "set priority"
+    nmcli connection modify "$1" connection.autoconnect-priority "$7" 
+    echo "set security"
+    nmcli connection modify "$1" wifi-sec.key-mgmt "$8"
+    nmcli connection modify "$1" wifi-sec.psk "$9"
+    echo "all done for $1"
+    echo
 }
-
+#
+#
 if [ "$RPITYPE" == "slave" ]
 then
     ipv4=192.168.1.212
@@ -69,6 +69,7 @@ echo
 #
 read -n 1 -s -r -p "Press any key before Starting above steps"
 echo
+echo "Thanks. You are going to lost the connection now...."
 #
 nmcli connection up id MOVISTAR_442D
 #
