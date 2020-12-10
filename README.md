@@ -1,6 +1,7 @@
 # smate_setup
 
 Setting-up additional programs and personal configurations to the official stellarmate image.
+
 ## Procedure
 
 This is work in progress. Many changes are expected.
