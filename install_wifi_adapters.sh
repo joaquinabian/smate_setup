@@ -58,7 +58,7 @@ function get_fars_robotics() {
     if [ ! -f "/usr/bin/install-wifi" ]
     then
         echo "*** wget install-wifi from fars-robotics  ***"
-        sudo wget http://www.fars-robotics.net/install-wifi -O /usr/bin/install-wifi
+        sudo wget http://downloads.fars-robotics.net/wifi-drivers/install-wifi -O /usr/bin/install-wifi
         sudo chmod +x /usr/bin/install-wifi
     else
         echo "install-wifi from fars-robotics already installed"
@@ -172,7 +172,9 @@ function install_rtl8814au_rcrg() {
 function install_rtl8821cu_fars(){
     echo "***** install RTL8821CU from FARS-ROBOTICS ******"
     echo
+    echo "get fars-robotics code"
     get_fars_robotics
+    echo "let install-wifi to load and install driver"
     sudo install-wifi 8821cu
 }
 #
