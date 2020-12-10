@@ -24,12 +24,12 @@ echo
 # echo
 #
 echo "** install hardinfo"
-sudo apt install hardinfo
+sudo apt -y install hardinfo
 echo
 #
-####################################  WAVEMON  #####################################################
+###################################  WAVEMON  ##################################
 echo "** Install wavemon"
-sudo apt install wavemon
+sudo apt -y install wavemon
 #
 TARGET="$HOME/.wavemonrc"
 cat > "$TARGET" <<- EOF
@@ -54,8 +54,8 @@ EOF
 sudo setcap cap_net_admin=eip /usr/bin/wavemon
 echo
 #
-###################################### TELNET ####################################################
-echo "Install TELNET"
+#################################### TELNET ####################################
+echo "** Install TELNET"
 sudo apt install telnet
 echo
 #
