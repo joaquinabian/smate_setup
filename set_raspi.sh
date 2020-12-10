@@ -34,11 +34,17 @@ sudo timedatectl set-timezone Europe/Madrid
 #
 #
 ##############################  SET WIFI COUNTRY  ##############################
+echo "Set ES wifi country"
 # this is not permanently set on raspi when using raspi-config
 # raspi-config does not modify /etc/default/crda
 # my raspi 4 seems to work OK without this setting
 # see https://www.raspberrypi.org/forums/viewtopic.php?t=260974
 # sudo iw reg set ES
+#
+# In wpa_supplicant, however there is a country setup
+# Stellarmate comes with country=KW
+TARGET="/etc/wpa_supplicant/wpa_supplicant.conf"
+sudo sed -i "s/country=[A-Z]*/country=ES/g" $TARGET        
 #
 #
 ###########################  SET SCREEN RESOLUTION  ############################
@@ -72,5 +78,13 @@ Plugin {
 EOF
 #
 #
+############################## REMOVE BLUETOOTH ################################
+echo "Disable BlueTooth"
+TARGET="/boot/config.txt"
+#  dtoverlay=disable-bt
+echo "ToBeDone"
+#
+#
+
 ################################################################################
 
