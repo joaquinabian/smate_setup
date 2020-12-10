@@ -56,7 +56,16 @@ else
     RPITYPE="test"
 fi
 #
+echo
+echo "*****  GET ROUTER HOME ROUTER PASSWORD *******"
+echo
+#
+read -r -p "Wifi router password ?" PASSWRD
+#
+#
 export RPITYPE
+export PASSWRD
+#
 #
 #
 echo
