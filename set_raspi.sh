@@ -91,9 +91,12 @@ echo
 ############################### REMOVE BLUETOOTH ###############################
 echo "Disable BlueTooth"
 TARGET="/boot/config.txt"
-#  dtoverlay=disable-bt
+#  
+cat >> $TARGET <<- EOF
+dtoverlay=disable-bt
+EOF
 #
-echo "ToBeDone"
+echo
 #
 #
 ################################################################################
