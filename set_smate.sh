@@ -85,7 +85,7 @@ echo
 ##############################  COPY KSTARS FOVs  ##############################
 echo "Copying KStars FOV data"
 SOURCE="./data/kstars_config"
-TARGET="/home/joaquin/.local/share/kstars"
+TARGET="/home/stellarmate/.local/share/kstars"
 #
 cp -v "$SOURCE"/fov.dat "$TARGET"
 #
@@ -94,9 +94,9 @@ echo
 ############################# COPY KSTARS CONFIG  ##############################
 echo "Copying KStars Configuration"
 SOURCE="./data/kstars_config"
-TARGET="/home/joaquin/.config"
+TARGET="/home/stellarmate/.config"
 #
-cp -v "$SOURCE"/kstarsrc "$TARGET"/.kstarsrc
+cp -v "$SOURCE"/kstarsrc "$TARGET"/kstarsrc
 #
 echo
 #
