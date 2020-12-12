@@ -1,7 +1,7 @@
 #!/bin/bash
 # Common Raspberry pi configuration steps
 #
-###################################    SET SPANISH KEYBOARD    #####################################
+##########################    SET SPANISH KEYBOARD    ##########################
 echo "*** Setting Spanish keyboard at $TARGET"
 TARGET="/etc/default/keyboard"
 #
@@ -17,7 +17,7 @@ EOF
 echo
 #
 #
-######################################   SET US LOCALE   ###########################################
+###############################   SET US LOCALE  ###############################
 echo "*** Setting US locale at $TARGET"
 TARGET="/etc/default/locale"
 #
@@ -31,7 +31,7 @@ EOF
 echo
 #
 #
-###################################   SET MADRID TIMEZONE   ########################################
+###########################   SET MADRID TIMEZONE   ############################
 echo "*** Setting Madrid Timezone"
 #
 sudo timedatectl set-timezone Europe/Madrid

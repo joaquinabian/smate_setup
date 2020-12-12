@@ -6,20 +6,25 @@
 echo "create links to logs"
 ln -s /home/stellarmate/.indi/logs /home/stellarmate/Desktop/indi_logs
 ln -s /home/stellarmate/.local/share/kstars/logs /home/stellarmate/Desktop/kstars_logs
-echo "done"
+#
+echo
 #
 #
 ############################  REMOVE NOT USED FOLDERS   ########################
 # I use 'rmdir' instead of 'rm -r' because if there is something inside it will fail
 # remove subfolders first, then main folder 
 echo "remove .astropy folder"
-rmdir /home/stellarmate/.astropy/config
-rmdir /home/stellarmate/.astropy
-echo "done"
+TARGET=/home/stellarmate/.astropy
+#
+rmdir "$TARGET"/config
+rmdir "$TARGET"
+#
+echo
 #
 echo "remove astropy link"
 rm /home/stellarmate/.config/astropy || echo "astropy link cannot be removed"
-echo "done"
+#
+echo
 #
 #
 ###########################  CHANGE NAME OF MACHINE  ###########################
@@ -43,15 +48,18 @@ fi
 echo "change raspi name to stellarmate@$NAME"
 sudo sed -i 's/127.0.1.1\tstellarmate/127.0.1.1\t"$NAME"/' /etc/hosts
 echo "$NAME" > /etc/hostname
-echo "to be done"
+#
+echo
 #
 #
 #########################   DONT START KSTARS AT BOOT  #########################
 echo "Do not start KStars at boot"
 TARGET="/home/stellarmate/.config/autostart/kstars.desktop"
 text="NotShowIn=LXDE;"
+#
 echo $text >> $TARGET
-echo "done"
+#
+echo
 #
 #
 ############################### COPY UDEV RULES  ###############################
@@ -59,7 +67,7 @@ echo "Copying udev rules"
 SOURCE="./data/udev_rules/"
 TARGET="/lib/udev/rules.d"
 #
-cp -v $SOURCE/* "$TARGET"
+cp -v "$SOURCE"/* "$TARGET"
 #
 echo
 #
@@ -69,7 +77,7 @@ echo "Copying device INDI configurations"
 SOURCE="./data/indi_config"
 TARGET="/home/stellarmate/.indi"
 #
-cp -v $SOURCE/* "$TARGET"
+cp -v "$SOURCE"/* "$TARGET"
 #
 echo
 #
@@ -92,3 +100,5 @@ cp -v "$SOURCE"/kstarsrc "$TARGET"/.kstarsrc
 #
 echo
 #
+#
+##############################               ###################################
