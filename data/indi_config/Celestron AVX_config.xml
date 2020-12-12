@@ -1,0 +1,276 @@
+<INDIDriver>
+<newSwitchVector device='Celestron AVX' name='DEBUG'>
+  <oneSwitch name='ENABLE'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DISABLE'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='Celestron AVX' name='POLLING_PERIOD'>
+  <oneNumber name='PERIOD_MS'>
+      1000
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='Celestron AVX' name='CONNECTION_MODE'>
+  <oneSwitch name='CONNECTION_SERIAL'>
+      On
+  </oneSwitch>
+  <oneSwitch name='CONNECTION_TCP'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='Celestron AVX' name='DEVICE_PORT'>
+  <oneText name='PORT'>
+      /dev/mount
+  </oneText>
+</newTextVector>
+<newSwitchVector device='Celestron AVX' name='DEVICE_BAUD_RATE'>
+  <oneSwitch name='9600'>
+      On
+  </oneSwitch>
+  <oneSwitch name='19200'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='38400'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='57600'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='115200'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='230400'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='DEVICE_AUTO_SEARCH'>
+  <oneSwitch name='INDI_ENABLED'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='INDI_DISABLED'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='DEBUG_LEVEL'>
+  <oneSwitch name='DBG_ERROR'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_WARNING'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_SESSION'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_DEBUG'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_EXTRA_1'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='LOGGING_LEVEL'>
+  <oneSwitch name='LOG_ERROR'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_WARNING'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_SESSION'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_DEBUG'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_EXTRA_1'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='LOG_OUTPUT'>
+  <oneSwitch name='CLIENT_DEBUG'>
+      On
+  </oneSwitch>
+  <oneSwitch name='FILE_DEBUG'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='Celestron AVX' name='ACTIVE_DEVICES'>
+  <oneText name='ACTIVE_GPS'>
+      GPS Simulator
+  </oneText>
+  <oneText name='ACTIVE_DOME'>
+      Dome Simulator
+  </oneText>
+</newTextVector>
+<newSwitchVector device='Celestron AVX' name='DOME_POLICY'>
+  <oneSwitch name='DOME_IGNORED'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DOME_LOCKS'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='Celestron AVX' name='GEOGRAPHIC_COORD'>
+  <oneNumber name='LAT'>
+      41.453611111111115406
+  </oneNumber>
+  <oneNumber name='LONG'>
+      2.2475000000000000533
+  </oneNumber>
+  <oneNumber name='ELEV'>
+      0
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='Celestron AVX' name='TELESCOPE_SLEW_RATE'>
+  <oneSwitch name='1x'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='2x'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='3x'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='4x'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='5x'>
+      On
+  </oneSwitch>
+  <oneSwitch name='6x'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='7x'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='8x'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='9x'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='TELESCOPE_TRACK_MODE'>
+  <oneSwitch name='TRACK_SIDEREAL'>
+      On
+  </oneSwitch>
+  <oneSwitch name='TRACK_SOLAR'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='TRACK_LUNAR'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='USEJOYSTICK'>
+  <oneSwitch name='ENABLE'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='DISABLE'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='Celestron AVX' name='JOYSTICKSETTINGS'>
+  <oneText name='MOTIONDIR'>
+      JOYSTICK_1
+  </oneText>
+  <oneText name='MOTIONDIRNS'>
+      AXIS_8
+  </oneText>
+  <oneText name='MOTIONDIRWE'>
+      AXIS_7
+  </oneText>
+  <oneText name='SLEWPRESET'>
+      JOYSTICK_2
+  </oneText>
+  <oneText name='SLEWPRESETUP'>
+      BUTTON_5
+  </oneText>
+  <oneText name='SLEWPRESETDOWN'>
+      BUTTON_6
+  </oneText>
+  <oneText name='ABORTBUTTON'>
+      BUTTON_1
+  </oneText>
+  <oneText name='PARKBUTTON'>
+      BUTTON_2
+  </oneText>
+  <oneText name='UNPARKBUTTON'>
+      BUTTON_3
+  </oneText>
+</newTextVector>
+<newSwitchVector device='Celestron AVX' name='MOTION_CONTROL_MODE'>
+  <oneSwitch name='MOTION_CONTROL_MODE_JOYSTICK'>
+      On
+  </oneSwitch>
+  <oneSwitch name='MOTION_CONTROL_MODE_AXES'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='JOYSTICK_LOCK_AXIS'>
+  <oneSwitch name='LOCK_AXIS_1'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='LOCK_AXIS_2'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='SIMULATE_PIER_SIDE'>
+  <oneSwitch name='SIMULATE_YES'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='SIMULATE_NO'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='Celestron AVX' name='FOCUS_MAX'>
+  <oneNumber name='FOCUS_MAX_VALUE'>
+      60000
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='Celestron AVX' name='FOCUS_BACKLASH_TOGGLE'>
+  <oneSwitch name='INDI_ENABLED'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='INDI_DISABLED'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='Celestron AVX' name='FOCUS_BACKLASH_STEPS'>
+  <oneNumber name='FOCUS_BACKLASH_VALUE'>
+      0
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='Celestron AVX' name='Hibernate'>
+  <oneSwitch name='Enable'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='Disable'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='CELESTRON_TRACK_MODE'>
+  <oneSwitch name='MODE_ALTAZ'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='MODE_EQ_N'>
+      On
+  </oneSwitch>
+  <oneSwitch name='MODE_EQ_S'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='MODE_RA_DEC'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='Celestron AVX' name='DST_STATE'>
+  <oneSwitch name='DST_ENABLED'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='Celestron AVX' name='FOCUS_MIN'>
+  <oneNumber name='FOCUS_MIN_VALUE'>
+      0
+  </oneNumber>
+</newNumberVector>
+</INDIDriver>

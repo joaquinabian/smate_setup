@@ -1,0 +1,109 @@
+<INDIDriver>
+<newSwitchVector device='SX CCD LodeStar' name='DEBUG'>
+  <oneSwitch name='ENABLE'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DISABLE'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='SX CCD LodeStar' name='POLLING_PERIOD'>
+  <oneNumber name='PERIOD_MS'>
+      1000
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='SX CCD LodeStar' name='DEBUG_LEVEL'>
+  <oneSwitch name='DBG_ERROR'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_WARNING'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_SESSION'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_DEBUG'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_EXTRA_1'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='SX CCD LodeStar' name='LOGGING_LEVEL'>
+  <oneSwitch name='LOG_ERROR'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_WARNING'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_SESSION'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_DEBUG'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_EXTRA_1'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='SX CCD LodeStar' name='LOG_OUTPUT'>
+  <oneSwitch name='CLIENT_DEBUG'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='FILE_DEBUG'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='SX CCD LodeStar' name='ACTIVE_DEVICES'>
+  <oneText name='ACTIVE_TELESCOPE'>
+      Celestron AVX
+  </oneText>
+  <oneText name='ACTIVE_ROTATOR'>
+      Rotator Simulator
+  </oneText>
+  <oneText name='ACTIVE_FOCUSER'>
+      Sesto Senso 2
+  </oneText>
+  <oneText name='ACTIVE_FILTER'>
+      CCD Simulator
+  </oneText>
+  <oneText name='ACTIVE_SKYQUALITY'>
+      SQM
+  </oneText>
+</newTextVector>
+<newSwitchVector device='SX CCD LodeStar' name='UPLOAD_MODE'>
+  <oneSwitch name='UPLOAD_CLIENT'>
+      On
+  </oneSwitch>
+  <oneSwitch name='UPLOAD_LOCAL'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='UPLOAD_BOTH'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='SX CCD LodeStar' name='UPLOAD_SETTINGS'>
+  <oneText name='UPLOAD_DIR'>
+      
+  </oneText>
+  <oneText name='UPLOAD_PREFIX'>
+      IMAGE_XXX
+  </oneText>
+</newTextVector>
+<newSwitchVector device='SX CCD LodeStar' name='TELESCOPE_TYPE'>
+  <oneSwitch name='TELESCOPE_PRIMARY'>
+      On
+  </oneSwitch>
+  <oneSwitch name='TELESCOPE_GUIDE'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='SX CCD LodeStar' name='CCD_COMPRESSION'>
+  <oneSwitch name='CCD_COMPRESS'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='CCD_RAW'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+</INDIDriver>

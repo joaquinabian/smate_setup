@@ -1,0 +1,169 @@
+[Align]
+AstrometryImageScaleHigh=46.30528518195177
+AstrometryImageScaleLow=34.47286741885507
+AstrometryPositionDE=12.886899999999997
+AstrometryPositionRA=148.1376734006291
+AstrometrySolverType=1
+PAHMountSpeedIndex=2
+SolverBinningIndex=3
+SolverGotoOption=2
+
+[Capture]
+CaptureDirectory=/home/stellarmate/Pictures
+DefaultCaptureCCD=GPhoto CCD
+
+[Catalogs]
+ShowCatalogNames=_Internet_Resolved,_Manual_Additions,_Internet_Resolved,_Manual_Additions,_Internet_Resolved,_Manual_Additions,_Internet_Resolved,_Manual_Additions
+
+[Colors]
+AngularRuler=#445566
+ArtificialHorizonColor=#c82828
+BoxBGColor=#000000
+BoxGrabColor=#900000
+BoxTextColor=#d2dbef
+CBoundColor=#222f2f
+CBoundHighColor=#445555
+CLineColor=#3d3d3d
+CNameColor=#718488
+ColorSchemeFile=moonless-night.colors
+CompassColor=#909055
+DEGuideError=#00a5ff
+DSNameColor=#75759c
+DarkAppColors=false
+EclColor=#613d12
+EqColor=#909090
+EquatorialGridColor=#445566
+FITSObjectLabelColor=#00ff00
+HIPSGridColor=#ffffff
+HSTColor=#930000
+HorizontalGridColor=#091f14
+HorzColor=#091f14
+ICColor=#382a7d
+LocalMeridianColor=#0059b3
+MWColor=#0d1115
+MessColor=#008f00
+NGCColor=#006666
+ObsListColor=#ff0000
+PNameColor=#ac9800
+PlanetTrailColor=#993311
+RAGuideError=#00ff00
+SNameColor=#577d7d
+SatColor=#ff0000
+SatLabelColor=#640000
+SensorFOVColor=#ffaa00
+SkyColor=#000000
+SolverFOVColor=#ffffff
+StarColorIntensity=5
+StarColorMode=0
+StarHopRouteColor=#00ffff
+SupernovaColor=#ffa500
+TargetColor=#dd0000
+UserLabelColor=#aaaaaa
+VisibleSatColor=#00ff00
+
+[DownloadDialog Settings]
+Height 1080=465
+Width 1920=700
+
+[Ekos]
+EkosLiveOnline=false
+EkosLiveUsername=jabian
+EkosWindowHeight=787
+EkosWindowWidth=963
+independentWindowEkos=true
+profile=nikon_avx_ppba_sesto_lodestar
+
+[FITSViewer]
+AutoDebayer=true
+LimitedResourcesMode=false
+
+[Focus]
+DefaultFocusCCD=GPhoto CCD
+DefaultFocusFocuser=Sesto Senso 2
+FocusAutoStarEnabled=true
+FocusMaxTravel=50000
+
+[GUI]
+PositionFocusBox=1681,0
+PositionGeoBox=0,909
+RunStartupWizard=false
+WindowHeight=1026
+WindowWidth=1920
+
+[General]
+AlignmentLogging=true
+CaptureLogging=true
+FocusLogging=true
+GuideLogging=true
+INDILogging=true
+LogToDefault=false
+LogToFile=true
+MountLogging=true
+ObservatoryLogging=true
+RegularLogging=false
+VerboseLogging=true
+
+[Guide]
+DECProportionalGain=133.3
+DefaultGuideCCD=CCD Simulator Guider
+DitherEnabled=true
+DitherPixels=10
+GuiderAccuracyThreshold=1
+RAProportionalGain=133.3
+
+[Location]
+CityName=Badalona
+CountryName=Spain
+DST=EU
+Elevation=17.5699997
+Latitude=41.453611111111115
+Longitude=2.2475
+TimeZone=1
+
+[MainWindow]
+Height 1024=939
+Height 1080=1026
+Height 768=939
+Height 900=704
+State=AAAA/wAAAAD9AAAAAAAAB4AAAAOoAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAUAAAAaAGsAcwB0AGEAcgBzAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABYAdgBpAGUAdwBUAG8AbwBsAEIAYQByAQAAAcP/////AAAAAAAAAAAAAAAWAEkATgBEAEkAVABvAG8AbABCAGEAcgEAAAN8/////wAAAAAAAAAAAAAAIABUAGUAbABlAHMAYwBvAHAAZQBUAG8AbwBsAEIAYQByAAAAAAD/////AAAAAAAAAAAAAAAWAEQAbwBtAGUAVABvAG8AbABCAGEAcgAAAAAA/////wAAAAAAAAAA
+ToolBarsMovable=Disabled
+Width 1024=1278
+Width 1280=1278
+Width 1600=1024
+Width 1920=1920
+Window-Maximized 768x1024=true
+Window-Maximized 900x1600=true
+
+[Observatory]
+weatherAlertCloseShutter=false
+
+[Satellites]
+ShowVisibleSatellites=true
+
+[TipOfDay]
+RunOnStart=false
+
+[View]
+AutoSelectGrid=false
+FOVNames=EdgeHD D90,TSOptics D90,SkyMaster
+FocusDec=44.98737468794268
+FocusRA=179.99792336048034
+ShowCLines=true
+ShowDeepSkyNames=true
+ShowEcliptic=true
+ShowHorizontalGrid=true
+ZoomFactor=9011.664257563512
+
+[Xplanet]
+XplanetBackgroundColorValue=#000000
+XplanetColor=#ff0000
+
+[indi]
+INDIAuxiliaryLogging=true
+INDICCDLogging=true
+INDIDomeLogging=true
+INDIFocuserLogging=true
+INDIMountLogging=true
+INDIWeatherLogging=true
+INDIWindowHeight=847
+independentWindowINDI=true

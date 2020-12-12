@@ -1,0 +1,198 @@
+<INDIDriver>
+<newTextVector device='GPhoto CCD' name='DEVICE_PORT'>
+  <oneText name='PORT'>
+      /dev/relay
+  </oneText>
+</newTextVector>
+<newNumberVector device='GPhoto CCD' name='CCD_INFO'>
+  <oneNumber name='CCD_MAX_X'>
+      0
+  </oneNumber>
+  <oneNumber name='CCD_MAX_Y'>
+      0
+  </oneNumber>
+  <oneNumber name='CCD_PIXEL_SIZE'>
+      5.5100002288818359375
+  </oneNumber>
+  <oneNumber name='CCD_PIXEL_SIZE_X'>
+      5.5100002288818359375
+  </oneNumber>
+  <oneNumber name='CCD_PIXEL_SIZE_Y'>
+      5.5100002288818359375
+  </oneNumber>
+  <oneNumber name='CCD_BITSPERPIXEL'>
+      0
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='GPhoto CCD' name='DEBUG'>
+  <oneSwitch name='ENABLE'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DISABLE'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='GPhoto CCD' name='POLLING_PERIOD'>
+  <oneNumber name='PERIOD_MS'>
+      1000
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='GPhoto CCD' name='DEBUG_LEVEL'>
+  <oneSwitch name='DBG_ERROR'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_WARNING'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_SESSION'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_DEBUG'>
+      On
+  </oneSwitch>
+  <oneSwitch name='DBG_EXTRA_1'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='GPhoto CCD' name='LOGGING_LEVEL'>
+  <oneSwitch name='LOG_ERROR'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_WARNING'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_SESSION'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_DEBUG'>
+      On
+  </oneSwitch>
+  <oneSwitch name='LOG_EXTRA_1'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='GPhoto CCD' name='LOG_OUTPUT'>
+  <oneSwitch name='CLIENT_DEBUG'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='FILE_DEBUG'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='GPhoto CCD' name='ACTIVE_DEVICES'>
+  <oneText name='ACTIVE_TELESCOPE'>
+      Celestron AVX
+  </oneText>
+  <oneText name='ACTIVE_ROTATOR'>
+      Rotator Simulator
+  </oneText>
+  <oneText name='ACTIVE_FOCUSER'>
+      Sesto Senso 2
+  </oneText>
+  <oneText name='ACTIVE_FILTER'>
+      CCD Simulator
+  </oneText>
+  <oneText name='ACTIVE_SKYQUALITY'>
+      SQM
+  </oneText>
+</newTextVector>
+<newSwitchVector device='GPhoto CCD' name='UPLOAD_MODE'>
+  <oneSwitch name='UPLOAD_CLIENT'>
+      On
+  </oneSwitch>
+  <oneSwitch name='UPLOAD_LOCAL'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='UPLOAD_BOTH'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='GPhoto CCD' name='UPLOAD_SETTINGS'>
+  <oneText name='UPLOAD_DIR'>
+      
+  </oneText>
+  <oneText name='UPLOAD_PREFIX'>
+      IMAGE_XXX
+  </oneText>
+</newTextVector>
+<newSwitchVector device='GPhoto CCD' name='TELESCOPE_TYPE'>
+  <oneSwitch name='TELESCOPE_PRIMARY'>
+      On
+  </oneSwitch>
+  <oneSwitch name='TELESCOPE_GUIDE'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='GPhoto CCD' name='CCD_COMPRESSION'>
+  <oneSwitch name='CCD_COMPRESS'>
+      Off
+  </oneSwitch>
+  <oneSwitch name='CCD_RAW'>
+      On
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='GPhoto CCD' name='CCD_CFA'>
+  <oneText name='CFA_OFFSET_X'>
+      0
+  </oneText>
+  <oneText name='CFA_OFFSET_Y'>
+      0
+  </oneText>
+  <oneText name='CFA_TYPE'>
+      RGGB
+  </oneText>
+</newTextVector>
+<newSwitchVector device='GPhoto CCD' name='CCD_STREAM_ENCODER'>
+  <oneSwitch name='RAW'>
+      On
+  </oneSwitch>
+  <oneSwitch name='MJPEG'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newTextVector device='GPhoto CCD' name='RECORD_FILE'>
+  <oneText name='RECORD_FILE_DIR'>
+      /home/stellarmate/indi__D_
+  </oneText>
+  <oneText name='RECORD_FILE_NAME'>
+      indi_record__T_
+  </oneText>
+</newTextVector>
+<newNumberVector device='GPhoto CCD' name='RECORD_OPTIONS'>
+  <oneNumber name='RECORD_DURATION'>
+      1
+  </oneNumber>
+  <oneNumber name='RECORD_FRAME_TOTAL'>
+      30
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='GPhoto CCD' name='CCD_STREAM_RECORDER'>
+  <oneSwitch name='SER'>
+      On
+  </oneSwitch>
+  <oneSwitch name='OGV'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newNumberVector device='GPhoto CCD' name='MIRROR_LOCK'>
+  <oneNumber name='MIRROR_LOCK_SECONDS'>
+      0
+  </oneNumber>
+</newNumberVector>
+<newSwitchVector device='GPhoto CCD' name='CCD_TRANSFER_FORMAT'>
+  <oneSwitch name='FORMAT_FITS'>
+      On
+  </oneSwitch>
+  <oneSwitch name='FORMAT_NATIVE'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+<newSwitchVector device='GPhoto CCD' name='CCD_FORCE_BLOB'>
+  <oneSwitch name='On'>
+      On
+  </oneSwitch>
+  <oneSwitch name='Off'>
+      Off
+  </oneSwitch>
+</newSwitchVector>
+</INDIDriver>

@@ -1,0 +1,97 @@
+<INDIDriver>
+    <newSwitchVector device="Pegasus PPBA" name="DEBUG">
+        <oneSwitch name="ENABLE">
+On
+        </oneSwitch>
+        <oneSwitch name="DISABLE">
+Off
+        </oneSwitch>
+    </newSwitchVector>
+    <newNumberVector device="Pegasus PPBA" name="POLLING_PERIOD">
+        <oneNumber name="PERIOD_MS">
+1000
+        </oneNumber>
+    </newNumberVector>
+    <newSwitchVector device="Pegasus PPBA" name="CONNECTION_MODE">
+        <oneSwitch name="CONNECTION_SERIAL">
+      On
+        </oneSwitch>
+    </newSwitchVector>
+    <newTextVector device="Pegasus PPBA" name="DEVICE_PORT">
+        <oneText name="PORT">
+/dev/serial/by-id/usb-Pegasus_Astro_PPBADV_revA_PPBA4PSFVS-if00-port0
+        </oneText>
+    </newTextVector>
+    <newSwitchVector device="Pegasus PPBA" name="DEVICE_BAUD_RATE">
+        <oneSwitch name="9600">
+On
+        </oneSwitch>
+        <oneSwitch name="19200">
+Off
+        </oneSwitch>
+        <oneSwitch name="38400">
+Off
+        </oneSwitch>
+        <oneSwitch name="57600">
+Off
+        </oneSwitch>
+        <oneSwitch name="115200">
+Off
+        </oneSwitch>
+        <oneSwitch name="230400">
+Off
+        </oneSwitch>
+    </newSwitchVector>
+    <newSwitchVector device="Pegasus PPBA" name="DEVICE_AUTO_SEARCH">
+        <oneSwitch name="INDI_ENABLED">
+Off
+        </oneSwitch>
+        <oneSwitch name="INDI_DISABLED">
+On
+        </oneSwitch>
+    </newSwitchVector>
+    <newSwitchVector device="Pegasus PPBA" name="DEBUG_LEVEL">
+        <oneSwitch name="DBG_ERROR">
+On
+        </oneSwitch>
+        <oneSwitch name="DBG_WARNING">
+On
+        </oneSwitch>
+        <oneSwitch name="DBG_SESSION">
+On
+        </oneSwitch>
+        <oneSwitch name="DBG_DEBUG">
+On
+        </oneSwitch>
+    </newSwitchVector>
+    <newSwitchVector device="Pegasus PPBA" name="LOGGING_LEVEL">
+        <oneSwitch name="LOG_ERROR">
+On
+        </oneSwitch>
+        <oneSwitch name="LOG_WARNING">
+On
+        </oneSwitch>
+        <oneSwitch name="LOG_SESSION">
+On
+        </oneSwitch>
+        <oneSwitch name="LOG_DEBUG">
+Off
+        </oneSwitch>
+    </newSwitchVector>
+    <newSwitchVector device="Pegasus PPBA" name="LOG_OUTPUT">
+        <oneSwitch name="CLIENT_DEBUG">
+On
+        </oneSwitch>
+        <oneSwitch name="FILE_DEBUG">
+Off
+        </oneSwitch>
+    </newSwitchVector>
+    <newSwitchVector device="Pegasus PPBA" name="AUTO_DEW">
+        <oneSwitch name="INDI_ENABLED">
+Off
+        </oneSwitch>
+        <oneSwitch name="INDI_DISABLED">
+On
+        </oneSwitch>
+    </newSwitchVector>
+</INDIDriver>
