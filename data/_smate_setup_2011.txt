@@ -489,4 +489,158 @@ git config --global user.email "gatoygata2@gmail.com"
 git config --global core.editor geany
 
 git config --global core.autocrlf input    # to share with windows
+
 ********************************************************************************
+************************** NEW INSTALL 201213  *********************************
+********************************************************************************
+
+- Run smate_setup.sh in experimental Raspi
+- Manually install 8812au driver
+- Put wifi device (Kuwfi) and SD Card on Scope Raspi
+- Power ON Scope system (read 12.5V, 0.2A)
+- Initialize HC with 'last alignment' 
+- Connect with VNC (local_master)
+- Star KStars
+    kstars time is system time (OK)
+- Start EKOS
+    EKOS profile Wizard Appears
+        - Device in this computer
+        - Set profile avx_lod_ss2_nkn_sks:
+            Dont autoconnect
+
+            Celestron AVX
+            GPhotoCCD
+            SX CCD
+            SestoSenso2
+            SkySafari
+            Pegasus PPBA
+
+    Los datos del profile son guardados en una base de datos sqlite:
+        > find /home/stellarmate -mmin -4
+        /home/stellarmate/.local/share/kstars/userdb.sqlite
+
+- Before, had to fix manually:
+    sudo: unable to resolve host master: System error
+    > sudo geany /etc/hosts
+    Modify hosts for 127.0.1.1 to 'master'
+
+- Save and Start profile
+    - Devices ports are not set despite indi config files are correct
+    - For mount set dev/mount and Save. Get:
+
+     2020-12-13T14:11:18: [WARNING] Failed to save configuration. 
+     Config file is owned by root! This will lead to serious errors. 
+     To fix this, run: sudo chown -R $USER:$USER ~/.indi 
+
+     .indi  xx_config.xml files have owner&group:root any/owner/owner
+     .indi  xx_config.xml.default files have owner&group:stellarmate any/owner/nobody
+
+     -Stop profile
+     - Run:
+     > sudo chown -R $USER:$USER ~/.indi
+
+     Now all owner&group:stellarmate but still differ on permissions
+
+- Start again profile
+    - Now devices ports are set
+
+- Connect
+    - DSLR camera settings window appear
+        - Set values and save
+            > sudo find /home/stellarmate -mmin -2
+            /home/stellarmate/.indi/GPhoto CCD_config.xml
+            /home/stellarmate/.local/share/kstars/userdb.sqlite
+
+    - Everything seems OK
+    - Solver show warning:
+      2020-12-13T15:30:40 Warning! The calculated field of view is out of bounds. 
+      Ensure the telescope focal length and camera pixel size are correct.
+    - In INDI panel CelestronAVX->Options->ScopeProperties&name
+        Set to 80/480 for scope and guider, Name TSOptics D90
+        Save
+        Info saved in:
+        stellarmate@master:~ $ sudo find /home/stellarmate -mmin -1
+        /home/stellarmate/.indi/ScopeConfig.xml
+        /home/stellarmate/.indi/Celestron AVX_config.xml
+    - Solver warning is fixed.
+      Now shows:
+      2020-12-13T17:51:12 World Coordinate System (WCS) is enabled. 
+      CCD rotation must be set either manually in the CCD driver or by solving an
+      image before proceeding to capture any further images, otherwise the WCS 
+      information may be invalid.
+    
+    - Had to modify GPhotoCCD->ImageSettings->Frame.
+        was in red with Withd and Height in Left and Top
+    - CelestronAVX->SiteManagement->UTC&Scope...ation  both in red
+        UTC: 2020-12-14T13:03:05 vs 2020-12-13T14:52:57
+        elevation:   0 vs 17.57
+        If I Set, get:
+        2020-12-13T15:02:37: [INFO] Updating time is not necessary since mount is already aligned. 
+        2020-12-13T15:02:20: [INFO] Updating location is not necessary since mount is already aligned.
+
+- Switch to SSD
+  > sudo rpi-eeprom-update -d -a
+  > sync
+  reboot
+  - Menu->Accesories->SD Card Copier
+    from SC32G(/dev/mmcblk0) to Samsung Portable SSD T5 (/dev/sda)
+    Dont check New Partition UUIDS
+    START
+  - shutdown
+  - poweroff power supply
+  - takeof sdcard
+  - power on
+  -reconnect by VNC
+
+- When starting EKOS without setting HC INDI CelestronAXV gives:
+    2020-12-13T17:16:10: [INFO] Observer location updated: Longitude (2.2475) Latitude (41.4536) 
+    2020-12-13T17:16:10: [INFO] Device configuration saved. 
+    2020-12-13T17:16:10: [INFO] Saving device configuration... 
+    2020-12-13T17:16:10: [INFO] Device configuration saved. 
+    2020-12-13T17:16:10: [INFO] Saving device configuration... 
+    2020-12-13T17:16:08: [INFO] Device configuration applied. 
+    2020-12-13T17:16:08: [INFO] Observer location updated: Longitude (2.2475) Latitude (41.4536) 
+    2020-12-13T17:16:08: [INFO] Dome Policy set to: Dome ignored. Mount can park or unpark regardless of dome parking state. 
+    2020-12-13T17:16:08: [INFO] Session log file /home/stellarmate/.indi/logs/2020-12-13/indi_celestron_gps/indi_celestron_gps_17:15:40.log 
+    2020-12-13T17:16:08: [INFO] Loading device configuration... 
+    2020-12-13T17:16:08: [WARNING] Mount is NOT aligned. You must align the mount first before you can use it. Disconnect, align the mount, and reconnect again. 
+    2020-12-13T17:16:08: [INFO] Mount UTC offset: 1.00. UTC time: 2020-12-13T16:55:33. DST: Off 
+    2020-12-13T17:16:08: [INFO] Mount supports guiding. 
+    2020-12-13T17:16:08: [INFO] Mount is unparked. 
+    2020-12-13T17:16:08: [INFO] Mount tracking is off. 
+    2020-12-13T17:16:06: [INFO] Mount model: AVX 
+    2020-12-13T17:16:06: [INFO] Controller version: 5.29 
+    2020-12-13T17:16:06: [INFO] Celestron AVX is online. 
+    2020-12-13T17:15:40: [INFO] Auto search is disabled. 
+    2020-12-13T17:15:40: [INFO] Session log file /home/stellarmate/.indi/logs/2020-12-13/indi_celestron_gps/indi_celestron_gps_17:15:40.log 
+    2020-12-13T17:15:40: [INFO] Debug is enabled. 
+  
+  - 17:16 is time UTC (system is now 18:16)
+    Mount lecture implies large error (16:55):
+    Mount UTC offset: 1.00. UTC time: 2020-12-13T16:55:33. DST: Off 
+    KStars is set to Settings->Configure->KStars Updates All Devices
+
+- When setting the HC I get:
+    2020-12-13T17:49:26: [INFO] Updating location is not necessary since mount is already aligned. 
+    2020-12-13T17:49:26: [INFO] Updating time is not necessary since mount is already aligned. 
+    2020-12-13T17:49:26: [INFO] Device configuration saved. 
+    2020-12-13T17:49:26: [INFO] Saving device configuration... 
+    2020-12-13T17:49:26: [INFO] Device configuration saved. 
+    2020-12-13T17:49:26: [INFO] Saving device configuration... 
+    2020-12-13T17:49:26: [INFO] Mount UTC offset: 1.00. UTC time: 2020-12-14T15:59:35. DST: Off 
+    2020-12-13T17:49:26: [INFO] Mount supports guiding. 
+    2020-12-13T17:49:26: [INFO] Mount is unparked. 
+    2020-12-13T17:49:26: [INFO] Mount is unparked. 
+    2020-12-13T17:49:24: [INFO] Mount model: AVX 
+    2020-12-13T17:49:24: [INFO] Controller version: 5.29 
+    2020-12-13T17:49:24: [INFO] Celestron AVX is online. 
+    2020-12-13T17:16:10: [INFO] Observer location updated: Longitude (2.2475) Latitude (41.4536) 
+    2020-12-13T17:16:10: [INFO] Device configuration saved. 
+    2020-12-13T17:16:10: [INFO] Saving device configuration... 2020-12-13T17:49:17: [INFO] Celestron AVX is offline. 
+
+  - One day difference !!
+  - If I Set it on INDI Site Management, I get
+    2020-12-13T17:52:21: [INFO] Updating time is not necessary since mount is already aligned. 
+
+- Did first try to the system with 10x30" pictures of rosetta nebula (guided)
+  
