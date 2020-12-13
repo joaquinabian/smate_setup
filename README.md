@@ -54,10 +54,27 @@ The driver was installed manually with:
 To prevent this problem, a manual upgrade and reboot should be performed before running smate_setup, but at the beginning there is no wifi available...  
 [Howto handle it](https://unix.stackexchange.com/questions/145294/how-to-continue-a-script-after-it-reboots-the-machine)
 
+### 2. Get sudo: unable to resolve host master: System error
+
+When checking hosts:
+
+```bash  
+stellarmate@master:~ $ cat /etc/hosts
+127.0.0.1 localhost
+::1    localhost ip6-localhost ip6-loopback
+ff02::1   ip6-allnodes
+ff02::2   ip6-allrouters
+
+127.0.1.1 "$NAME"
+stellarmate@master:~ $ 
+```
+
+This is a bug to be fixed.  
+Fixed manually for the moment.
+
 ## ToDo
 
 - Fix problerm of wifi-driver-install fails when apt upgrade changes kernel
 - Set a method to sync GPS time with system time in raspi master and slave (chrony, python...)
 - Change mode to set Static IPs in the dedicated (TP-Link) router.  
   Now static IPs are defined in router. Set it as for Home Network in network manager.
--
