@@ -23,7 +23,7 @@
 - Connect
 
 
-*************************** Update Solftware ********************************
+****************************** Update Solftware ********************************
 - Update stellarmate by VNC with 'Update Software'
 - sudo apt install geany
 - sudo geany /boot/config.txt
@@ -31,7 +31,7 @@
   (https://www.raspberrypi.org/documentation/configuration/config-txt/video.md)
 
 
-************************* Config Raspi ******************************
+*******************************   Config Raspi   *******************************
 (Esto se hizo despues de poner las IPs estáticas, 
 pero debería haberse hecho aquí)
 - raspi-config->Localisation Set 
@@ -41,7 +41,7 @@ pero debería haberse hecho aquí)
     wifi country: ES
 
   
-***************************** Añadir WIFIs ********************************
+********************************  Añadir WIFIs  ********************************
 - In App->Device select new wifi -> FRITZ_442D
 - Set home router pass.
 
@@ -99,9 +99,10 @@ Check https://youtu.be/6qsyPTDU2aY for static IP and ethernet connection
 *************************** KStars FOV symbols *********************************
 - Settings->FOV symbols->Edit FVO
 - Remove all
-- Set Celestron SkyMaster 20x80: Binocular / 126 arcmin / circle
-- Set TS Optics - D90: Camera / 480 / 4288x2848/5.51x5.51 / rectangle -> FOV 169.2 x 112.4 arcmin
-- Set Edge HD - D90: Camera / 2032 / 4288x2848/5.51x5.51 / rectangle -> FOV 39.97x26.55 arcmin
+- Set:
+    SkyMaster:   Binclr /      /                     / circle --> FOV 126 arcmin
+    TSOptics D90:Camera / 480  / 4288x2848/5.51x5.51 / rectngl -> FOV 169.2x112.4 arcmin
+    EdgeHD D90:  Camera / 2032 / 4288x2848/5.51x5.51 / rectngl -> FOV 39.97x26.55 arcmin
 
 
 ****************************** Map serial ports *******************************
@@ -150,7 +151,7 @@ https://indilib.org/forum/stellarmate/7577-zippity.html#58671
 After a while, for no special reason, ssd was moved from raspi to usb3 hub
 
 
-****************************Install gps*****************************************
+**************************!!!  Install gps  !!!*********************************
 - sd8 en rpi glass 2
 - se instaló gps en PC-RADIO/ubuntu y funcionó
 - conectar gps a raspi.
@@ -193,7 +194,7 @@ After a while, for no special reason, ssd was moved from raspi to usb3 hub
 - iwconfig wlan1 | grep -i --color quality
 
 
-******************** Eliminate raspi bluetooth / wifi **************************
+******************!!! Eliminate raspi bluetooth / wifi !!!**********************
 - sudo geany /boot/config.txt
     # Disable board wifi, bluetooth (quim 200925)
     # En smate_slave solo bluetooth (quim 201019)
@@ -203,8 +204,15 @@ After a while, for no special reason, ssd was moved from raspi to usb3 hub
     # disable wifi internal module (quim 200925)
     blacklist brcmfmac
     blacklist brcmutil
+
+    
+*******************  Change country in wpa_supplicant.conf  ********************
 - sudo geany /etc/wpa_supplicant/wpa_supplicant.conf
     country=ES              # era KW. master y slave
+    
+
+************************!!! Remove dhcpcd service !!!***************************
+- To be documented why
 - sudo systemctl stop dhcpcd.service
 
 
@@ -265,7 +273,7 @@ Previamente me pidió credentials (pero creo que no es necesario):
     psw:  smate
 
 
-*********************** Do NOT START KSTARS AT BOOT ****************************
+************************ Do NOT START KSTARS AT BOOT ***************************
 - MENU -> Preferences -> Main Menu Editor
 
 In the Main Menu editor GUI:
@@ -312,11 +320,11 @@ ToBeTested: alternative design:
         wlan1 : connected to network
 
 
-****************************** TELNET + INDI ***********************************
+******************************** TELNET + INDI *********************************
   
 >> sudo apt install telnet
 
-***************************  SET SKI SAFARI ************************************
+*******************************  SET SKI SAFARI ********************************
 
 Sky Safari configuration -> Telescope ->
     host: 192.168.1.211
@@ -351,7 +359,7 @@ the driver 88XXau.ko is in:
 - remove all connections created while the two adapters were connected.
 
 ******************SET ACCESS POINT WITH TP-LINK WR841n ROUTER*******************
-*********************************FAILED***************************************** 
+*********************************** FAILED ************************************* 
 - disconnect wifi adapter from raspi
 - connect patch ethernet cable (gris):
         SYSTIMAX-I 1074D 4/24 (UL) CM AU012402A  
@@ -389,12 +397,12 @@ the driver 88XXau.ko is in:
 NOTA: Hay manual de TP link
       Instrucciones en https://www.tp-link.com/es/support/faq/417/
       
-*************************CHANGE RASPI NAME**************************************
+****************************** CHANGE RASPI NAME *******************************
 ToBeDocumented
 - stellarmate@master
 - stellarmate@slave
 
-***************************USE TP-LINK AS ROUTER********************************
+**************************** USE TP-LINK AS ROUTER *****************************
 - TP-Link sin ninguna conexion
     IP:         192.168.100.10
     LAN
@@ -447,7 +455,7 @@ ToBeDocumented
 
 ESTO FUNCIONA
 
-******************************SET TIME******************************************
+*****************************!!!  SET TIME  !!!*********************************
 Connection with router
 Profile simulators + GPS
 
@@ -466,11 +474,11 @@ Buscar método para sincronizar system time:
 2) chrony
 3) ????
 
-*****************************ADD TEMPERATURE MONITOR******************************
+*************************  ADD TEMPERATURE MONITOR  ****************************
 - Right click on panel --> Add/remove Panel items
 - Panel Applets --> Add --> CPU Temperature Monitor
 
-*************************WORKING WITH GIT*****************************************
+***************************  WORKING WITH GIT  ***********************************
 # git is already installed on raspi -> no on stellarmate
 # see https://projects.raspberrypi.org/en/projects/getting-started-with-git
 #     https://www.raspberrypi.org/magpi-issues/MagPi27.pdf
@@ -480,5 +488,5 @@ git config --global user.name "joaquinabian"
 git config --global user.email "gatoygata2@gmail.com"
 git config --global core.editor geany
 
-git config --global core. autocrlf input    # to share with windows
+git config --global core.autocrlf input    # to share with windows
 ********************************************************************************
