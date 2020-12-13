@@ -28,7 +28,7 @@ In Ubuntu
 - Files -> Other Files -> Locations -> STELLARMATE (single touch) --(Opening takes time)--> Pictures --Connect as Anonymous--(Opening takes time)-->
 - Copy/Paste **smate_setup** folder from **/Home/programas/** to **smb://stellarmate.local/pictures/**
 
-In Raspi (Via VNC)
+In Rasberry pi (Via VNC)
 
 - Close KStars.
 - Open terminal.
@@ -41,3 +41,23 @@ In Raspi (Via VNC)
     >> cd smate_setup
     >> sudo ./smate_setup.sh
     ```
+
+## Problems
+
+### 1. wifi driver install fails
+  
+`install: cannot create regular file '/lib/modules/5.4.72-v7l+/kernel/drivers/net/wireless': No such file or directory`  
+An inmediate check shows the directory exists but, next day, after boot, I realise that the actual kernel is **5.4.79-v7l+**.  
+I suspect this is because `apt upgrade` did a kernel upgrade but it was only updated in the system after reboot.  
+The driver was installed manually with:  
+`sudo install-wifi 8812au`  
+To prevent this problem, a manual upgrade and reboot should be performed before running smate_setup, but at the beginning there is no wifi available...  
+[Howto handle it](https://unix.stackexchange.com/questions/145294/how-to-continue-a-script-after-it-reboots-the-machine)
+
+## ToDo
+
+- Fix problerm of wifi-driver-install fails when apt upgrade changes kernel
+- Set a method to sync GPS time with system time in raspi master and slave (chrony, python...)
+- Change mode to set Static IPs in the dedicated (TP-Link) router.  
+  Now static IPs are defined in router. Set it as for Home Network in network manager.
+-
