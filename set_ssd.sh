@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Not sure if this is still neccessary.
 # 
 TARGET="/etc/default/rpi-eeprom-update"
 echo "Update EEPROM to allow boot from SSD"
