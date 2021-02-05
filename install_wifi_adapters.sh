@@ -121,6 +121,9 @@ function install_rtl8821cu_brkt() {
 function install_rtl8814au_rcrg() {
     # For the KuWFi USB WiFi ADAPTER 
     # https://github.com/aircrack-ng/rtl8812au
+    # https://miloserdov.org/?p=5507#comment-31469
+    # https://github.com/aircrack-ng/rtl8814au
+    #
     echo "***** install RTL8814AU ******"
     echo
     #
@@ -137,9 +140,7 @@ function install_rtl8814au_rcrg() {
     sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' Makefile
     sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
     #
-    echo "** modify dkms files"
-    # no dkms-install en repository !! -- ? -->
-    #sed -i 's/^dkms build/ARCH=arm dkms build/' dkms-install.sh  
+    echo "** modify dkms files" 
     sed -i 's/^MAKE="/MAKE="ARCH=arm\ /' dkms.conf
     #
     ### method 1
