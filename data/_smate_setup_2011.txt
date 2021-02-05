@@ -154,18 +154,80 @@ After a while, for no special reason, ssd was moved from raspi to usb3 hub
 **************************!!!  Install gps  !!!*********************************
 - sd8 en rpi glass 2
 - se instaló gps en PC-RADIO/ubuntu y funcionó
+
+> sudo apt-get install gpsd gpsd-clients python-gps
+
+** gpsmon reads data directly from the serial port, 
+   but cgps read GPS positions from the GPSD service.
+
 - conectar gps a raspi.
 - Cerca ventana. No es necesario en exterior
-- gpsmon    # datos en ncurses
-- xgps      # datos en gui y grid con satélites
-- cgps
+
+** Enero de 2021 No funciona!
+>> sudo apt remove gpsd --purge
+>> sudo apt install gpsd
+- La file de configuracion /etc/default/gpsd aparece nueva. 
+>> sudo geany /etc/default/gpsd
+    START_DAEMON="true"
+    USBAUTO="true"
+    DEVICES="/dev/ttyUSB0"
+    GPSD_OPTIONS="-n"
+    GPSD_SOCKET="/var/run/gpsd.sock"
+- reboot
+
+>> sudo service gpsd status
+ 
+  gpsd.service - GPS (Global Positioning System) Daemon
+   Loaded: loaded (/lib/systemd/system/gpsd.service; disabled; vendor preset: en
+   Active: active (running) since Sat 2021-01-16 14:19:58 CET; 14s ago
+  Process: 1024 ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $DEVICES (code=exited, st
+ Main PID: 1027 (gpsd)
+    Tasks: 2 (limit: 4915)
+   CGroup: /system.slice/gpsd.service
+           \u2514\u25001027 /usr/sbin/gpsd -n /dev/ttyUSB0
+
+Jan 16 14:19:58 slave systemd[1]: Starting GPS (Global Positioning System) Daemo
+Jan 16 14:19:58 slave systemd[1]: Started GPS (Global Positioning System) Daemon
+lines 1-11/11 (END)
+
+>> xgps
+xgps da error sobre 'cairo.context'
+Se soluciona con:
+>> sudo apt-get install python-gi-cairo
+
+>> gpsmon    # datos en ncurses
+>> xgps      # datos en gui y grid con satélites
+>> cgps
+
+- Solo con el GPS conectado (y la cámara) todo funciona
+- Hay problema cuando se enchufan otros USB (HUB) aunque sea USB3 y el gps sea USB2
+xgps funcionando, se enchufa usb3, y deja de funcionar. 
+Aunque apague y reinicie xgps ya no aparecen señales
+sudo service gpsd status reporta todo igual, sin warnings
+
+
 - systemctl | grep gpsd
   gpsd.service   loaded active running   GPS (Global Positioning System) Daemon                                                       
   gpsd.socket    loaded active running   GPS (Global Positioning System) Daemon Sockets
 
 - indiserver -vv indi_gpsd > /home/stellarmate/Desktop/indiserver_log2.txt 2>&1
 
-
+SYNC WITH CHRONY
+-Install chrony
+-edit /etc/chrony/cvhrony.conf
+ - Añadir directiva refclock
+    refclock SOCK /var/run/chrony.ttyUSB0.sock  # esta file no existe. No va
+    refclock SOCK /run/chrony.ttyUSB0.sock      # encontrada con find. No va
+    refclock SHM 0 poll 3                       #                      No va
+    refclock SHM 0 poll 3 refid GPS0            # funciona! error 121ms
+ - Añadir directiva makestep
+    makestep 2 3
+    
+https://pimylifeup.com/using-ntp-on-linux-with-chrony/
+https://wiki.alpinelinux.org/wiki/Chrony_and_GPSD
+https://0048ba.com/Setup_GPS_NTP_server_RPi.html
+http://robotsforroboticists.com/chrony-gps-for-time-synchronization/
+     
 **************************Install external wifi*********************************
 - rpi glass 1
 - sudo apt install git
