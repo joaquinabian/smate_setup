@@ -118,6 +118,7 @@ then
   cat >> $TARGET <<- EOF
 server 192.168.0.202 iburst offset 0.5
 server 192.168.0.212 iburst prefer offset 0.5
+local stratum 10
 EOF
 fi
 # To be finished
