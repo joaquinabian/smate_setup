@@ -25,7 +25,7 @@ function set_connection() {
 #
 if [ -z "$PASSWRD" ]
 then
-    read -r -p "Wifi router password ?  " PASSWRD
+    read -r -p "Wifi router movistar password ?  " PASSWRD
 fi
 #
 #
