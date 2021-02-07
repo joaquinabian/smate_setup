@@ -106,6 +106,12 @@ TEXT="install external wifi adapters"
 SCRIPT="install_wifi_adapters.sh"
 execute_shell "$TEXT" "$SCRIPT"
 #
+if [ "$RPITYPE" = "slave" ]
+then
+    TEXT="install GPS AND CAMERA"
+    SCRIPT="set_slave_camera_gps.sh"
+    execute_shell "$TEXT" "$SCRIPT"
+fi
 #
 TEXT="setting up stellarmate things"
 SCRIPT="set_smate.sh"
