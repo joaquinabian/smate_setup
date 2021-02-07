@@ -214,7 +214,7 @@ sudo service gpsd status reporta todo igual, sin warnings
 
 SYNC WITH CHRONY
 -Install chrony
--edit /etc/chrony/cvhrony.conf
+-edit /etc/chrony/chrony.conf
  - Añadir directiva refclock
     refclock SOCK /var/run/chrony.ttyUSB0.sock  # esta file no existe. No va
     refclock SOCK /run/chrony.ttyUSB0.sock      # encontrada con find. No va
@@ -222,11 +222,122 @@ SYNC WITH CHRONY
     refclock SHM 0 poll 3 refid GPS0            # funciona! error 121ms
  - Añadir directiva makestep
     makestep 2 3
+ - Añadir Allow NTP clients
+    allow all
+ - Utilizar hardware clock si no hay remedio
+    local stratum 10
     
 https://pimylifeup.com/using-ntp-on-linux-with-chrony/
 https://wiki.alpinelinux.org/wiki/Chrony_and_GPSD
 https://0048ba.com/Setup_GPS_NTP_server_RPi.html
 http://robotsforroboticists.com/chrony-gps-for-time-synchronization/
+
+--------------------------------------------------------------------------------
+To prevent future problems I try to use dev rules for gps
+
+* 99-stellarmate-gps_quim.rules
+SUBSYSTEM=="tty", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", MODE="0666", SYMLINK+="gps_quim"
+                                   Prolific Technology.      PL2303 Serial Port
+
+El problema es que estas rules son idénticas a las de la montura.
+Esto produce que se cree el dispositivo /dev/mount
+Debo añadir el número de serie al dispositivo:
+>> udevadm info -a -n /dev/ttyUSB0 | grep '{serial}' | head -n1
+ATTRS{serial}=="0000:01:00.0"
+
+* 99-stellarmate-gps_quim.rules
+SUBSYSTEM=="tty", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", ATTRS{serial}=="0000:01:00.0", MODE="0666", SYMLINK+="gpsk"
+                                   Prolific Technology.      PL2303 Serial Port
+                                   
+y tambien en la montura para diferenciar(me lo invento) 
+porque si no sigue creandose /dev/mount:
+
+* 99-stellarmate-mount.rules
+SUBSYSTEM=="tty", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", ATTRS{serial}=="XXXX", MODE="0666", SYMLINK+="mount"
+                                   Prolific Technology.      PL2303 Serial Port
+
+En /etc/deafult/gpsd:
+
+  # Devices gpsd should collect to at boot time.
+  # They need to be read/writeable, either by user gpsd or the group dialout.
+  DEVICES="/dev/gpsk"                                 
+
+Nada de esto funciona: No se crea /dev/gpsk
+
+Para que funcione, en /etc/deafult/gpsd:
+
+DEVICES="/dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller_D-if00-port0"
+
+Debería poder solucionarlo con rules...!!!!
+Cuando se desconecta y reconecta el gps, se crean los archivos de 
+/dev/serial/by-id y /by-path y /dev/mount. Todos apuntan a ttyUSB1
+Para que no intefieran habría que ponerle ATTRS{serial}
+
+Ver: https://unix.stackexchange.com/questions/479302/udev-rules-for-seemingly-indistinguishable-devices
+
+Useful (https://serverfault.com/questions/989555/gpsd-socket-for-chrony-does-not-work):
+>> cat /etc/chrony.conf
+>> chronyc sources
+>> cat /lib/systemd/system/gpsd.socket
+>> cat /etc/systemd/system/gpsd.service
+
+Ver https://gpsd.gitlab.io/gpsd/gpsd-time-service-howto.html#_feeding_chrony_from_gpsd
+Indica que cuando gpsd se corre como root...
+-> Modifico /etc/systemd/system/gpsd.service
+    [Service]
+    User=root     <--- añado ****
+    Type=forking
+    EnvironmentFile=-/etc/default/gpsd
+    ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $DEVICES
+    
+Reinicio daemons... pero sigue sin funcionar SOCK
+
+-------------------------------------------------------------------------------
+En master:
+>> sudo apt install chrony
+>> sudo geany /etc/chrony/chrony.conf
+   server 192.168.1.212 iburst prefer offset 0.5
+   
+Y ya está. Si fallaran los servers en el pool, se sincronizaría con el gps del raspi slave
+Offset 0.5 sec es para reducir el error debido al network.
+Daba 700 ms y ahora da 200 ms
+Si se usa la red de 5Gb el error disminuye hasta 20 ms
+
+--------------------------------------------------------------------------------
+
+>> indiserver indi-gpsd 
+--------------------------------------------------------------------------------
+For daemon to start at boot
+>> systemctl enable chronyd 
+
+Esto falla, Chronyd está parado. 
+Chrony tiene que encenderse despues de que gpsd esté en marcha. Si no, se apaga:
+
+stellarmate@slave:~ $ sudo service chrony status
+\u25cf chrony.service - chrony, an NTP client/server
+   Loaded: loaded (/lib/systemd/system/chrony.service; enabled; vendor preset: e
+   Active: inactive (dead) since Mon 2021-01-25 14:25:17 CET; 1min 8s ago
+     Docs: man:chronyd(8)
+           man:chronyc(1)
+           man:chrony.conf(5)
+ Main PID: 584 (code=exited, status=0/SUCCESS)
+
+Jan 25 14:24:50 slave systemd[1]: Started chrony, an NTP client/server.
+Jan 25 14:25:29 slave chronyd[584]: Selected source GPS0
+Jan 25 14:25:29 slave chronyd[584]: System clock wrong by 16.834294 seconds, adj
+Jan 25 14:25:46 slave chronyd[584]: System clock was stepped by 16.834294 second
+Jan 25 14:25:17 slave chronyd[584]: Backward time jump detected!
+Jan 25 14:25:17 slave chronyd[584]: Can't synchronise: no selectable sources
+Jan 25 14:25:17 slave chronyd[584]: chronyd exiting
+Jan 25 14:25:17 slave systemd[1]: Stopping chrony, an NTP client/server...
+Jan 25 14:25:17 slave systemd[1]: chrony.service: Succeeded.
+Jan 25 14:25:17 slave systemd[1]: Stopped chrony, an NTP client/server.
+lines 1-18/18 (END)
+
+- Preparo pequeño programa para iniciar streaming y start chrony
+    run_at_boot.sh
+Sin embargo chrony no ha empezado. Quizás hay que esperar más
+
      
 **************************Install external wifi*********************************
 - rpi glass 1
@@ -517,6 +628,36 @@ ToBeDocumented
 
 ESTO FUNCIONA
 
+******************** USE ADDRESS RESERVATION WITH TPLINK ***********************
+
+TP-Link Address Reservation
+==============================
+ID	MAC Address	        Reserved IP Address	    Status	    Modify
+1	1C-BF-CE-F9-77-D3	192.168.100.3	        Enabled	    Modify Delete
+2	DC-A6-32-39-BA-2B	192.168.100.2	        Enabled	    Modify Delete
+3	1C-BF-CE-18-76-62	192.168.100.1	        Enabled	    Modify Delete
+
+
+
+DHCP Client List
+====================
+ID	Client Name	    MAC Address	        Assigned IP	        Lease Time
+1	slave	        DC-A6-32-2C-4B-36	192.168.100.100	    01:04:46
+2	master	        DC-A6-32-6D-CD-0D	192.168.100.101	    01:04:46
+3	quim-radio	    84-16-F9-0B-A5-73	192.168.100.102	    01:17:41
+4	slave	        1C-BF-CE-18-76-62	192.168.100.1	    Permanent
+
+
+******************************    MAC ADDRESSES   ******************************
+
+      MAC                    device                       IP
+1C-BF-CE-F9-77-D3    (master) Kwfi wifi device          ***.11
+DC:A6:32:2C:4B:36     slave rpi (wlan0)                 ***.102
+1C-BF-CE-18-76-62    (slave) PiHUt Realtek wifi device  ***.12
+DC-A6-32-6D-CD-OD     master rpi (wlan0)                ***.101
+84-16-F9-0B-A5-73     PC quim-radio
+
+
 *****************************!!!  SET TIME  !!!*********************************
 Connection with router
 Profile simulators + GPS
@@ -705,4 +846,99 @@ git config --global core.autocrlf input    # to share with windows
     2020-12-13T17:52:21: [INFO] Updating time is not necessary since mount is already aligned. 
 
 - Did first try to the system with 10x30" pictures of rosetta nebula (guided)
+
+
+****************** SET WIFI DRIVER OVER USB3  *********************************
+* To monitor modules (for example the driver 8812au)
+
+-Get all parameters
+> modinfo 8812au
+filename:       /lib/modules/5.4.83-v7l+/kernel/drivers/net/wireless/8812au.ko
+version:        v5.7.0_34085.20200313
+author:         Realtek Semiconductor Corp.
+description:    Realtek Wireless Lan Driver
+license:        GPL
+srcversion:     44DE4CA3F84E78BF40486B8
+alias:          usb:v0846p9054d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v20F4p809Bd*dc*dsc*dp*ic*isc*ip*in*
+.....................................................
+alias:          usb:v0BDAp8812d*dc*dsc*dp*ic*isc*ip*in*
+depends:        cfg80211
+name:           8812au
+vermagic:       5.4.83-v7l+ SMP mod_unload modversions ARMv7 p2v8 
+parm:           rtw_wireless_mode:int
+parm:           rtw_ips_mode:The default IPS mode (int)
+parm:           rtw_lps_level:The default LPS level (int)
+parm:           rtw_lps_chk_by_tp:int
+parm:           rtw_max_bss_cnt:int
+........................................................
+
+-Using systool to get current parameters
+> sudo apt install sysfsutils 
+> systool -vm 8812au
+Module = "8812au"
+
+  Attributes:
+    coresize            = "2457600"
+    initsize            = "0"
+    initstate           = "live"
+    refcnt              = "0"
+    srcversion          = "44DE4CA3F84E78BF40486B8"
+    taint               = "O"
+    uevent              = <store method only>
+    version             = "v5.7.0_34085.20200313"
+
+  Parameters:
+    if2name             = "wlan%d"
+    ifname              = "wlan%d"
+    rtw_FileMaskEfuse   = "0"
+    rtw_GLNA_type       = "0"
+    rtw_OffEfuseMask    = "0"
+    rtw_RFE_type        = "64"
+    rtw_TxBBSwing_2G    = "255"
+    rtw_TxBBSwing_5G    = "255"
+    rtw_adaptivity_en   = "0"
+    rtw_adaptivity_mode = "0"
+    rtw_adaptivity_th_edcca_hl_diff= "0"
+    rtw_adaptivity_th_l2h_ini= "0"
+    rtw_ampdu_enable    = "1"
+    rtw_amplifier_type_2g= "0"
+    rtw_amplifier_type_5g= "0"
+    rtw_antdiv_cfg      = "2"
+    ...............................   
   
+The 8812au driver is set as USB2 by default.
+To set USB3 add to /etc/modprobe.d/8812au.conf:
+
+options 8812au rtw_power_mgnt=0 rtw_enusbss=0 rtw_drv_log_level=0 rtw_switch_usb_mode=1
+
+************************* SET NEW ARCHER ***************************************
+
+master
+wlan0   rpi wifi    DC-A6-32-6D-CD-0D   192.168.0.201   master_rpi
+wlan1   KuWfi       1C-BF-CE-F9-77-D3   192.168.0.211   master_kwifi
+
+slave
+wlan0   rpi wifi    DC-A6-32-2C-4B-36   192.168.0.202   slave_rpi
+wlan1   realtek     1C-BF-CE-18-76-62   192.168.0.212   slave_rltk
+
+
+-------- Compare speeds with iperf3 ---------
+
+> sudo apt install iperf3
+En master:
+> iperf -s
+En slave
+> iperf -c 192.168.1.211    # movistar
+> iperf -c 192.168.0.211    # archer
+
+Speed en Mbps:
+            master          slave
+        movstr archer  movstr archer
+send      -      -      2.9     137     
+receive 2.3     134     2.3     134
+
+
+> iperf -c [IP] -P 10 -t 30  # tests 10 connections together for 30 secs and gives
+                             # aggregated results along with 10 separate connection speeds.
+        
