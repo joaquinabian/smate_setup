@@ -103,7 +103,10 @@ Check https://youtu.be/6qsyPTDU2aY for static IP and ethernet connection
     SkyMaster:   Binclr /      /                     / circle --> FOV 126 arcmin
     TSOptics D90:Camera / 480  / 4288x2848/5.51x5.51 / rectngl -> FOV 169.2x112.4 arcmin
     EdgeHD D90:  Camera / 2032 / 4288x2848/5.51x5.51 / rectngl -> FOV 39.97x26.55 arcmin
-
+    
+- Note: For the simulators profile set also the values of the gear you want to mimick in 
+   -indi-telescope simulator-options
+   -indi-ccd simulator-simulator config 
 
 ****************************** Map serial ports *******************************
 - with serial port assistant
@@ -125,6 +128,10 @@ Check https://youtu.be/6qsyPTDU2aY for static IP and ethernet connection
 - sudo apt install sysinfo
 - sudo apt install hardinfo
 
+USbview no funciona directamente. Hay que modificar
+/usr/share/applications/usbview.desktop
+Cambiar: Exec=su-to-root -X -c /usr/bin/usbview
+Con:     Exec=sudo /usr/bin/usbview
 
 ********************************************************************************
 ************************** Mas Cosas Septiembre ********************************
@@ -338,7 +345,165 @@ lines 1-18/18 (END)
     run_at_boot.sh
 Sin embargo chrony no ha empezado. Quizás hay que esperar más
 
-     
+20210221
+En slave:
+Modifico run_at_boot.sh para dar unos segundos (sleep 10) entre gpsd y chrony
+Modifico etc/chrony.conf. Elimino refclock SOCK y añado prefer y require:
+refclock SHM 0 poll 3 refid GPS0 prefer require
+
+En master:
+Modifico /boot/config.txt para añadir boot_delay=60
+
+--------------------------------------------------------------------------------
+210322
+Problemas de sincronizacion en slave al añadir hwclock
+Al añadir el modulo de reloj (uno de los cuatro modulos comprados en amazon) 
+sale la fecha en el año 2001 en todos los sitios (gpsmon, xgps, system clock 
+y hardware clock).
+No hay forma que el gps coja la fecha correcta.
+
+Modifico manualmente el valor del modulo de reloj:
+>> sudo hwclock --set --date="03/22/2021 13:12:12"
+>> sudo hwclock --show
+2021-03-22 14:44:05.100091+01:00
+Y hago que el clock del systema coja la misma hora que el modulo:
+>> sudo hwclock --hctosys
+
+Ahora apago todo y enciendo de nuevo y parece que gpsd coge bien la date y 
+chrony tambien sincroniza bien el system time
+
+----------------- STANDARD TIME DEFINITION -----------------------------------
+Standard time is the local time in a country when Daylight Saving Time (DST) is not in use.
+Standard time is also known as winter time. 
+Standard time is sometimes referred to as or winter time or normal time, 
+while DST may also be called summer time, especially in the UK.
+
+
+
+********************************************************************************
+Que pasa con chrony ? (cont) retomado 210519
+
+Recien iniciado
+
+stellarmate@slave:~/Documents $ sudo service chrony status
+\u25cf chrony.service - chrony, an NTP client/server
+   Loaded: loaded (/lib/systemd/system/chrony.service; enabled; vendor preset: e
+   Active: inactive (dead) since Wed 2021-02-24 19:04:28 CET; 12min ago
+     Docs: man:chronyd(8)
+           man:chronyc(1)
+           man:chrony.conf(5)
+  Process: 589 ExecStart=/usr/sbin/chronyd $DAEMON_OPTS (code=exited, status=0/S
+  Process: 599 ExecStartPost=/usr/lib/chrony/chrony-helper update-daemon (code=e
+ Main PID: 593 (code=exited, status=0/SUCCESS)
+
+Feb 21 15:07:55 slave chronyd[593]: Frequency 22.235 +/- 34.812 ppm read from /v
+Feb 21 15:07:55 slave chronyd[593]: Loaded seccomp filter
+Feb 21 15:07:55 slave systemd[1]: Started chrony, an NTP client/server.
+Feb 21 15:08:34 slave chronyd[593]: Selected source GPS0
+Feb 21 15:08:34 slave chronyd[593]: System clock wrong by 273264.929452 seconds,
+Feb 24 19:02:59 slave chronyd[593]: System clock was stepped by 273264.929452 se
+Feb 24 19:04:28 slave chronyd[593]: chronyd exiting
+Feb 24 19:04:28 slave systemd[1]: Stopping chrony, an NTP client/server...
+Feb 24 19:04:28 slave systemd[1]: chrony.service: Succeeded.
+Feb 24 19:04:28 slave systemd[1]: Stopped chrony, an NTP client/server.
+
+
+Parece que chrony se para a pesar de que se inicia a boot al haber hecho
+>> sudo systemctl enable chrony  ## https://pimylifeup.com/using-ntp-on-linux-with-chrony/
+
+Sin embargo he encontrado esto:
+(https://www.linuxquestions.org/questions/debian-26/service-chronyd-stops-automatically-after-startup-4175691472/)
+
+-Anything in the journal? Is another time server running?
+-Ah thanks for that suggestion. 
+ I did some digging around and found that something like systemd-timesyncd.service was causing chrony to shutdown automatically. 
+ It's working now as it should.
+ 
+He encontrado ademas:
+https://unix.stackexchange.com/questions/585519/should-i-disable-systemd-timesyncd-if-ntp-is-installed
+ 
+Hago:
+
+>> stellarmate@master:~ $ sudo service systemd-timesyncd status
+Warning: The unit file, source configuration file or drop-ins of systemd-timesyncd.service changed on disk. Run 'systemctl daemon-r
+\u25cf systemd-timesyncd.service - Network Time Synchronization
+   Loaded: loaded (/lib/systemd/system/systemd-timesyncd.service; enabled; vendor preset: enabled)
+  Drop-In: /lib/systemd/system/systemd-timesyncd.service.d
+           \u2514\u2500disable-with-time-daemon.conf
+   Active: inactive (dead)
+Condition: start condition failed at Wed 2021-05-19 15:20:49 CEST; 1min 25s ago
+           \u2514\u2500 ConditionFileIsExecutable=!/usr/sbin/chronyd was not met
+     Docs: man:systemd-timesyncd.service(8)
+
+May 19 15:19:04 master systemd[1]: Condition check resulted in Network Time Synchronization being skipped.
+May 19 15:20:49 master systemd[1]: Condition check resulted in Network Time Synchronization being skipped.
+
+
+Hago 
+>> sudo systemctl disable systemd-timesyncd.service  
+
+Hago reboot y tengo el mismo problema. Pruebo:
+
+>> stellarmate@master:~ $ sudo systemctl disable systemd-timesyncd
+Removed /etc/systemd/system/dbus-org.freedesktop.timesync1.service.
+Removed /etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service.
+
+>> stellarmate@master:~ $ sudo service systemd-timesyncd status
+\u25cf systemd-timesyncd.service - Network Time Synchronization
+    Loaded: loaded (/lib/systemd/system/systemd-timesyncd.service; disabled; vendor preset: enabled)
+  Drop-In: /lib/systemd/system/systemd-timesyncd.service.d
+           \u2514\u2500disable-with-time-daemon.conf
+   Active: inactive (dead)
+Condition: start condition failed at Wed 2021-05-19 15:41:40 CEST; 3min 36s ago
+     Docs: man:systemd-timesyncd.service(8)
+
+May 19 15:41:40 master systemd[1]: Condition check resulted in Network Time Synchronization being skipped.
+--------------------------------------------------------------------------------
+
+Supongo que el problema es que se interfieren chrony y timesyncd...
+No consigo eliminar systemd-timesyncd service
+Hago pruebas en el raspi de test
+
+Instalo chrony
+>> sudo apt install chrony
+
+Intento eliminar timesyncd
+>> sudo systemctl disable --now systemd-timesyncd
+>> sudo systemctl disable --now systemd-timesyncd.service
+>> sudo systemctl enable --now chrony
+
+Sin éxito. 
+Aunque aquí ahora la salida es diferente que en el raspi master del telescopio!!!
+>> stellarmate@slave:~ $ sudo service systemd-timesyncd status
+Warning: The unit file, source configuration file or drop-ins of systemd-timesyncd.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+\u25cf systemd-timesyncd.service - Network Time Synchronization
+   Loaded: loaded (/lib/systemd/system/systemd-timesyncd.service; enabled; vendor preset: enabled)
+  Drop-In: /lib/systemd/system/systemd-timesyncd.service.d
+           \u2514\u2500disable-with-time-daemon.conf
+   Active: inactive (dead)
+Condition: start condition failed at Wed 2021-05-19 19:36:16 CEST; 34s ago
+           \u2514\u2500 ConditionFileIsExecutable=!/usr/sbin/chronyd was not met   <---- ***********
+     Docs: man:systemd-timesyncd.service(8)
+
+May 19 19:35:52 slave systemd[1]: Condition check resulted in Network Time Synchronization being skipped.
+May 19 19:36:16 slave systemd[1]: Condition check resulted in Network Time Synchronization being skipped.
+--------------------------------------------------------------------------------
+En este raspi parece que en la configuración tiene una instrucción para no empezar
+si existe chronyd...
+La instruccion está en la file de configuracion:
+>> stellarmate@slave:~ $ sudo grep -rnw /lib -e ConditionFileIsExecutable
+.....
+/lib/systemd/system/systemd-timesyncd.service.d/disable-with-time-daemon.conf:5:ConditionFileIsExecutable=!/usr/sbin/chronyd
+.......
+
+-------------------------------------------------------------------------------
+SOLUCION PRACTICA: crontab
+>> sudo crontab -e
+add line:
+@reboot sleep 120 && /usr/sbin/service chrony restart
+
+
+********************************************************************************
 **************************Install external wifi*********************************
 - rpi glass 1
 - sudo apt install git
@@ -445,6 +610,14 @@ Previamente me pidió credentials (pero creo que no es necesario):
     user: stellar@mate
     psw:  smate
 
+
+Nota (210223): 
+RealVNC permite tambien file transfer.
+En Raspberry OS se hace desde el icono en la taskbar.
+De PC a RPi no lo tengo claro: 
+Si primero paso de RPi a PC aparece una ventana en PC desde donde se puede transferir
+pero no tengo nada en el VNC viewer desde donde ir a esa ventana directamente.
+En SMate no se como se hace
 
 ************************ Do NOT START KSTARS AT BOOT ***************************
 - MENU -> Preferences -> Main Menu Editor
@@ -675,23 +848,59 @@ Profile simulators + GPS
 Buscar método para sincronizar system time:
 1) python script
 2) chrony
-3) ????
 
 *************************  ADD TEMPERATURE MONITOR  ****************************
 - Right click on panel --> Add/remove Panel items
 - Panel Applets --> Add --> CPU Temperature Monitor
+
 
 ***************************  WORKING WITH GIT  ***********************************
 # git is already installed on raspi -> no on stellarmate
 # see https://projects.raspberrypi.org/en/projects/getting-started-with-git
 #     https://www.raspberrypi.org/magpi-issues/MagPi27.pdf
 #     https://www.raspberrypi.org/magpi-issues/MagPi28.pdf
+#     https://githowto.com/
 #
-git config --global user.name "joaquinabian"
-git config --global user.email "gatoygata2@gmail.com"
-git config --global core.editor geany
+>> git config --global user.name "joaquinabian"
+>> git config --global user.email "gatoygata2@gmail.com"
+>> git config --global core.editor geany
+>> git config --global core.autocrlf input    # to share with windows
 
-git config --global core.autocrlf input    # to share with windows
+# cloning
+>> cd programs
+>> git clone https://github.com/joaquinabian/picamtools.git picamtools
+
+# make changes to file. Then, stage changes, commit and push
+>> cd picamtools
+>> git status
+>> git add timelapse_ctrl_exp_iso.py     # stage changes to this file 
+>> git commit -m "bunch of changes"      # commit staged
+>> git commit -a -m "bunch of changes"   # commit all modified
+>> git push                              # will ask user and password
+
+user: joaquiabian
+pass: M1s_gatos_2
+
+# Pull changes, force (delete local)
+>> git fetch --all
+>> git reset --hard origin/master
+
+June 2021
+Github will require Personnal Access Token (PAT)
+I obtained a PAT in windows following (saved in keypass):
+https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
+https://gist.github.com/ateucher/4634038875263d10fb4817e5ad3d332f
+
+El sistema no me pide el password porque está memorizado: 
+hay que quitarlo en "credential manager" (por hacer)
+https://github.community/t/how-to-start-using-a-personal-access-token-to-authenticate-git-on-windows/163304/2
+
+Para que quede memorizado el nuevo PAT
+https://docs.github.com/en/github/getting-started-with-github/getting-started-with-git/caching-your-github-credentials-in-git
+>> git config --global credential.helper wincred                 ## windows
+>> git config --global credential.helper cache                   ## linux
+>> git config --global credential.helper 'cache --timeout=3600'  ## linux ?
+
 
 ********************************************************************************
 ************************** NEW INSTALL 201213  *********************************
@@ -794,6 +1003,10 @@ git config --global core.autocrlf input    # to share with windows
   - takeof sdcard
   - power on
   -reconnect by VNC
+  
+- Note SSD
+ - One SSD can used in different raspis directly (except for:)
+ - The wifi has to be septup for each raspi (device MAC is different ?)
 
 - When starting EKOS without setting HC INDI CelestronAXV gives:
     2020-12-13T17:16:10: [INFO] Observer location updated: Longitude (2.2475) Latitude (41.4536) 
@@ -916,7 +1129,7 @@ options 8812au rtw_power_mgnt=0 rtw_enusbss=0 rtw_drv_log_level=0 rtw_switch_usb
 
 master
 wlan0   rpi wifi    DC-A6-32-6D-CD-0D   192.168.0.201   master_rpi
-wlan1   KuWfi       1C-BF-CE-F9-77-D3   192.168.0.211   master_kwifi
+wlan1   KuWfi       1C-BF-CE-F9-77-D3   192.168.0.211   master_kuwfi
 
 slave
 wlan0   rpi wifi    DC-A6-32-2C-4B-36   192.168.0.202   slave_rpi
@@ -942,3 +1155,67 @@ receive 2.3     134     2.3     134
 > iperf -c [IP] -P 10 -t 30  # tests 10 connections together for 30 secs and gives
                              # aggregated results along with 10 separate connection speeds.
         
+================================================================================
+********************************** KSTARS SETUP ********************************
+- To see DSOs
+View -> HiPS All Sky Overlay -> DSS Color
+
+- To see Telescope toolbar
+Settings -> Toolbars Shown -> Telescope Toolbar
+
+******************************ASTROMETRY INDEX FILES ***************************
+
+SM has already loaded a series of index files in:
+/usr/share/astrometry
+Other files can be downloaded selecting a folder in
+EKOS -> Align -> Options -> Index Files -> Index Files Location
+
+Locations:
+     All Sources
+     /home/stellarmate/.local/share/kstars/astrometry
+     /usr/share/astrometry
+           
+*************************  KERNEL UPDATE AND WIFI DEVICES  *********************
+Cada vez que hay update del kernel se pierden los drivers de los devices wifi
+Pasa tanto con los make-install y fars robotics (kwifi) como con los dkms-install (pihut).
+
+Procedimiento:
+----------------
+1) Conecta VNC normalmente
+2) Activa wifi raspi
+    - si estaba deshabilitada, modifica config.txt y reboot
+    - si estaba habilitada cambia device a wlan0 (
+    - en ambos casos conectala a la wifi TPlink (si no a movistar).
+3) Upgrade kernel y reboot
+4) Conecta VNC con la wifi raspi
+    opcion a - el tplink conoce el device raspi y asigna: 0.201 y 0.202
+               hay preparadas conexiones en VNC
+    opción b- si se conecta a movistar, ir al router, mira ip y conecta VNC a esa IP.
+               prepara una conexion temporal en VNC
+               
+5) Option master:
+     Conexion VNC device rpi - movistar 442D  (smate_mvstar_master 192.168.1.211)
+     >> cd Pictures/smate_setup/
+     >> sudo ./install_wifi_adapters.sh
+     Select 4 (fars 8814AU) 
+
+6) Déjalo como al principio 
+  (p.e. desconecta de raspi o deshabilita en config.txt la wifi raspi)
+7) reboot
+
+****************************MASTER INDEPENDIENTE Y UNICO************************
+
+- En Kstars poner location como Tiana
+Lat 41 28 26.88
+Lon 02 16 19.80
+Ele 92
+UT Off +1
+DST EU
+
+- Forzar inicio chrony
+>> sudo crontab -e
+add line:
+@reboot sleep 60 && /usr/sbin/service chrony restart
+
+- Eliminar delay que se usaba para dar tiempo a slave
+Comment boot_delay in config.txt
